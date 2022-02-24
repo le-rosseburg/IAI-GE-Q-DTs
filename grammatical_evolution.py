@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Implementation of the grammatical evolution
 
