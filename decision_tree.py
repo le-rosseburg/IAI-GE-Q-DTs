@@ -5,22 +5,55 @@ incl. q-learning and random init.
 
 """
 import numpy as np
-import abc
 
 class DecisionTree:
-  def __init__(self):
+  def __init__(self, phenotype, leaf):
+    self.program = phenotype
     self.current_reward = 0
+    self.leaves = {}
+    self.leaf_count = 0
     self.last_leaf = None
 
-  @abc.abstractmethod
-  def get_action(self, input):
-    pass
+    while "_leaf" in self.program:
+      new_leaf = leaf()
+      leaf_name = "leaf_{}".format(self.leaf_count)
+      self.leaves[leaf_name] = new_leaf
+      self.leaf_count += 1
 
+      self.program = self.program.replace("_leaf", "'{}.get_action()'".format(leaf_name), 1)
+      self.program = self.program.replace("_leaf", "{}".format(leaf_name), 1)
+
+    self.exec_ = compile(self.program, "<string>", "exec", optimize=2)
+
+  def get_action(self, input):
+    if len(self.program) == 0:
+        return None
+    variables = {} # {"out": None, "leaf": None}
+    for idx, i in enumerate(input):
+      variables["_in_{}".format(idx)] = i
+    variables.update(self.leaves)
+
+    exec(self.exec_, variables)
+
+    current_leaf = self.leaves[variables["leaf"]]
+    current_q_value = max(current_leaf.q)
+    if self.last_leaf is not None:
+        self.last_leaf.update(self.current_reward, current_q_value)
+    self.last_leaf = current_leaf 
+    
+    return current_leaf.get_action()
+  
   def set_reward(self, reward):
     self.current_reward = reward
 
   def reset(self):
     self.last_leaf = None
+
+  def __call__(self, x):
+    return self.get_action(x)
+
+  def __str__(self):
+    return self.program
 
 
 class Leaf:
@@ -54,7 +87,7 @@ class Leaf:
   
   def update(self, reward, q_next):
     if self.last_action is not None:
-      leaf.q[leaf.last_action] += leaf.learning_rate * (reward + leaf.discount_factor * q_next - leaf.q[leaf.last_action])
+      self.q[self.last_action] += self.learning_rate * (reward + self.discount_factor * q_next - self.q[self.last_action])
 
   def next_iteration(self):
     self.iteration[self.last_action] += 1
