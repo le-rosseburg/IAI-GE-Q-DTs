@@ -147,7 +147,13 @@ lr = "auto" if args.learning_rate == "auto" else float(args.learning_rate)
 class CLeaf(Leaf):
     def __init__(self):
         super(CLeaf, self).__init__(
-            args.n_actions, lr, args.df, args.eps, randInit=True, low=args.low, up=args.up
+            args.n_actions,
+            lr,
+            args.df,
+            args.eps,
+            randInit=True,
+            low=args.low,
+            up=args.up,
         )
 
 
@@ -238,7 +244,7 @@ def fitness(tree, episodes=args.episodes):
                 previous = obs[:]
 
                 obs, rew, done, info = env.step(action)
-                # e.render()
+                # env.render()
                 tree.set_reward(rew)
                 cumulated_reward += rew
 

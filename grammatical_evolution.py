@@ -128,7 +128,7 @@ def mate(ind1, ind2, individual):
     if np.random.uniform() < 0.5:
         new_offspring = []
         for idx, ind in enumerate([ind1, ind2]):
-            _, used = Translator(1, [object], [0]).genotype_to_str(ind)
+            _, used = GETranslator(1, [object], [0]).genotype_to_str(ind)
             if used > len(ind):
                 used = len(ind)
             # generates a new genotype with the length min(length(ind1), length(ind2))
