@@ -124,6 +124,7 @@ def mutate(ind, attribute):
 def mate(ind1, ind2, individual):
     offspring = tools.cxOnePoint(ind1, ind2)
 
+    # makes no sense
     if np.random.uniform() < 0.5:
         new_offspring = []
         for idx, ind in enumerate([ind1, ind2]):
