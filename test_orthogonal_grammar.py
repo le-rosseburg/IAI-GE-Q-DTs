@@ -6,7 +6,7 @@ import argparse
 import numpy as np
 from time import time, sleep
 from numpy import random
-from decision_tree import EpsGreedyLeaf, PythonDT, RandomlyInitializedEpsGreedyLeaf
+from decision_tree import DecisionTree, Leaf
 from grammatical_evolution import grammatical_evolution
 from ge_translator import GETranslator
 from joblib import parallel_backend
@@ -144,10 +144,10 @@ input_space_size = args.input_space
 lr = "auto" if args.learning_rate == "auto" else float(args.learning_rate)
 
 # Creation of an ad-hoc Leaf class
-class CLeaf(RandomlyInitializedEpsGreedyLeaf):
+class CLeaf(Leaf):
     def __init__(self):
         super(CLeaf, self).__init__(
-            args.n_actions, lr, args.df, args.eps, low=args.low, up=args.up
+            args.n_actions, lr, args.df, args.eps, randInit=True, low=args.low, up=args.up
         )
 
 
@@ -206,14 +206,14 @@ def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
         fitness: The fitness of the tree that was constructed
     """
     phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(genotype)
-    bt = PythonDT(phenotype, leaf)
+    bt = DecisionTree(phenotype, leaf)
     return fitness_function(bt, episodes)
 
 
 def fitness(tree, episodes=args.episodes):
     """
-    Calculates the fitness of a given PythonDT on an environment.
-    :param tree: A PythonDT whose fitness is to be evaluated
+    Calculates the fitness of a given DecisionTree on an environment.
+    :param tree: A DecistionTree whose fitness is to be evaluated
     :param episodes: Number of episodes
 
     Returns:

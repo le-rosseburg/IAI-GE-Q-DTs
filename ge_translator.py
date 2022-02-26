@@ -62,7 +62,7 @@ class GETranslator:
 
     def _fix_phenotype(self, string):
         """
-        This method fixes the phenotype string so that it can be used in a PythonDT.
+        This method fixes the phenotype string so that it can be used in a DecisionTree.
         :param string: A string containing a phenotype
 
         Returns:
