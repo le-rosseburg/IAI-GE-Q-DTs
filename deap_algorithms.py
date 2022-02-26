@@ -6,6 +6,7 @@ Modified implementation of the used deap algorithms
 import numpy as np
 from deap import tools
 
+
 def varAnd(population, toolbox, cxpb, mutpb):
     """Part of an evolutionary algorithm applying only the variation part
     (crossover **and** mutation). The modified individuals have their
@@ -43,28 +44,38 @@ def varAnd(population, toolbox, cxpb, mutpb):
     """
     offspring = [toolbox.clone(ind) for ind in population]
     for i, o in enumerate(offspring):
-        o.parents = [i] 
+        o.parents = [i]
 
     # Apply crossover and mutation on the offspring
     for i in range(1, len(offspring), 2):
         if np.random.uniform() < cxpb:
-            offspring[i - 1], offspring[i] = toolbox.mate(offspring[i - 1],
-                                                          offspring[i])
-            offspring[i-1].parents.append(i)
+            offspring[i - 1], offspring[i] = toolbox.mate(
+                offspring[i - 1], offspring[i]
+            )
+            offspring[i - 1].parents.append(i)
             offspring[i].parents.append(i - 1)
             del offspring[i - 1].fitness.values, offspring[i].fitness.values
 
     for i in range(len(offspring)):
         if np.random.uniform() < mutpb:
-            offspring[i], = toolbox.mutate(offspring[i])
+            (offspring[i],) = toolbox.mutate(offspring[i])
             del offspring[i].fitness.values
 
     return offspring
 
 
-
-def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
-             halloffame=None, verbose=__debug__, logfile=None, var=varAnd):
+def eaSimple(
+    population,
+    toolbox,
+    cxpb,
+    mutpb,
+    ngen,
+    stats=None,
+    halloffame=None,
+    verbose=__debug__,
+    logfile=None,
+    var=varAnd,
+):
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_.
 
@@ -124,7 +135,7 @@ def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
        Basic Algorithms and Operators", 2000.
     """
     logbook = tools.Logbook()
-    logbook.header = ['gen', 'nevals'] + (stats.fields if stats else [])
+    logbook.header = ["gen", "nevals"] + (stats.fields if stats else [])
     best = None
     best_leaves = None
 
@@ -139,7 +150,11 @@ def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
             best = fit[0]
             best_leaves = leaves[i]
             with open(logfile, "a") as log_:
-                log_.write("[{}] New best at generation 0 with fitness {}\n".format(datetime.datetime.now(), fit))
+                log_.write(
+                    "[{}] New best at generation 0 with fitness {}\n".format(
+                        datetime.datetime.now(), fit
+                    )
+                )
                 log_.write(str(ind) + "\n")
                 log_.write("Leaves\n")
                 log_.write(str(leaves[i]) + "\n")
@@ -173,7 +188,11 @@ def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
                 best = fit[0]
                 best_leaves = leaves[i]
                 with open(logfile, "a") as log_:
-                    log_.write("[{}] New best at generation {} with fitness {}\n".format(datetime.datetime.now(), gen, fit))
+                    log_.write(
+                        "[{}] New best at generation {} with fitness {}\n".format(
+                            datetime.datetime.now(), gen, fit
+                        )
+                    )
                     log_.write(str(ind) + "\n")
                     log_.write("Leaves\n")
                     log_.write(str(leaves[i]) + "\n")
@@ -184,7 +203,9 @@ def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
 
         # Replace the current population by the offspring
         for o in offspring:
-            argmin = np.argmin(map(lambda x: population[x].fitness.values[0], o.parents))
+            argmin = np.argmin(
+                map(lambda x: population[x].fitness.values[0], o.parents)
+            )
 
             if o.fitness.values[0] > population[o.parents[argmin]].fitness.values[0]:
                 population[o.parents[argmin]] = o
