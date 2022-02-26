@@ -104,11 +104,10 @@ def mutate(ind, attribute):
 
     if np.random.uniform() < 0.5:
         # randomly mutate one gene
-        ind[rand] = attribute()
+        ind[rand] = attribute_generator()
     else:
-        # ???
         # makes no sense as genotypes should be of fixed lengths according to paper
-        # duplicate a random amount of genes
+        # duplicates a random amount of genes
         ind.extend(np.random.choice(ind, size=rand))
     return (ind,)
 
@@ -125,16 +124,14 @@ def mutate(ind, attribute):
 def mate(ind1, ind2, individual):
     offspring = tools.cxOnePoint(ind1, ind2)
 
-    # ???
-    # don't understand what this does and why
     if np.random.uniform() < 0.5:
         new_offspring = []
         for idx, ind in enumerate([ind1, ind2]):
-            # verstehe nicht wie Translater hier aufgerufen wird (hat keine 3 paramter!?)
             _, used = Translator(1, [object], [0]).genotype_to_str(ind)
             if used > len(ind):
                 used = len(ind)
-            new_offspring.append(individual(offspring[idx][:used]))
+            # generates a new genotype with the length min(length(ind1), length(ind2))
+            new_offspring.append(individual_generator(offspring[idx][:used]))
         offspring = (new_offspring[0], new_offspring[1])
     return offspring
 

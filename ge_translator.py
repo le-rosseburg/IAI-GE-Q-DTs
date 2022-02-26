@@ -17,7 +17,7 @@ class GETranslator:
 
     def _calculate_phenotype_value(self, candidate, gene):
         """
-        Calculates a phenotype value based on a candidate and a gene.
+        Calculates a phenotype value based on the production rule derived from a candidate and a gene.
         :param candidate: A candidate of the grammar?
         :param gene: A gene of a genotype
 
@@ -32,7 +32,7 @@ class GETranslator:
         """
         This method translates a genotype into an executable program (phenotype).
         If the individual runs out of genes, it restarts from the beginning, as suggested by Ryan et al 1998.
-        :param genotype: A genotype containing
+        :param genotype: A genotype containing genes
 
         Returns:
             phenotype: A list of values depicting the phenotype
