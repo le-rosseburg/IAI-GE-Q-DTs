@@ -5,7 +5,7 @@ Implementation of the grammatical evolution
 """
 import numpy as np
 from deap import base, creator, tools, algorithms
-from .algorithms import eaSimple
+from .deap_algorithms import eaSimple
 
 
 def grammatical_evolution(fitness_function, n_individuals, n_generations, cxpb, mutpb, init_len=100, 
