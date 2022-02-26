@@ -17,3 +17,4 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 
 ## Project Guidlines: 
 - [Reproducibility Checklist](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=a2067dd448cbae4be0ebaabc1809dd1b&file_name=Reproducibility.pdf)
+- [PEP8 code documentation](https://www.python.org/dev/peps/pep-0008/)
