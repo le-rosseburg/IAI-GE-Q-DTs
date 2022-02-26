@@ -52,7 +52,7 @@ class DecisionTree:
             self.leaves[leaf_name] = new_leaf
             self.leaf_count += 1
 
-            # replace phentype entry with newly created leaf
+            # replace phenotype entry with newly created leaf
             self.program = self.program.replace(
                 "_leaf", "'{}.get_action()'".format(leaf_name), 1
             )
@@ -70,7 +70,6 @@ class DecisionTree:
             variables["_in_{}".format(idx)] = i
         variables.update(self.leaves)
 
-        """what exactly is executed? how does the phenotype look and what is done with phentype(string) + variables(dict)"""
         exec(self.exec_, variables)
 
         current_leaf = self.leaves[variables["leaf"]]

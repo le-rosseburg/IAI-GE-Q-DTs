@@ -204,7 +204,7 @@ def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
     """
     Converts a genotype to a phenotype, creates a tree based on the phenotype and evaluates the fitness of this tree.
     :param fitness_function: The fitness function that is used to calculate the fitness
-    :param leaf: LeafClass that is used for to build the tree
+    :param leaf: LeafClass that is used to build the tree
     :param genotype: Genotype to be converted for the tree
     :param episodes: Number of episodes to evaluate fitness
 
