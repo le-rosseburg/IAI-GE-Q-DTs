@@ -3,6 +3,14 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 
 ---
 
+## installation guide
+- pip install git+https://github.com/maotto/deap@master 
+
+## comands
+
+python test_orthogonal_grammar.py --environment_name CartPole-v1 --jobs 1 --seed 42 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --lambda_ 200 --generations 100 --cxp 0 --mp 1 --low -1 --up 1 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"
+
+
 ## Links
 - [Paper](https://arxiv.org/pdf/2012.07723.pdf)
 - [Codebase of paper](https://gitlab.com/leocus/ge_q_dts)
