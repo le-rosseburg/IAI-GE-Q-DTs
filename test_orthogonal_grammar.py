@@ -6,6 +6,7 @@ import argparse
 import numpy as np
 from time import time, sleep
 from numpy import random
+
 from decision_tree import DecisionTree, Leaf
 from grammatical_evolution import grammatical_evolution
 from ge_translator import GETranslator
@@ -275,16 +276,16 @@ if __name__ == "__main__":
             fit_fcn,
             inputs=input_space_size,
             leaf=CLeaf,
-            individuals=args.lambda_,
-            generations=args.generations,
+            n_individuals=args.lambda_,
+            n_generations=args.generations,
             jobs=args.jobs,
-            cx_prob=args.cxp,
-            m_prob=args.mp,
+            cxpb=args.cxp,
+            mutpb=args.mp,
             logfile=logfile,
             seed=args.seed,
             mutation=args.mutation,
             crossover=args.crossover,
-            initial_len=args.genotype_len,
+            init_len=args.genotype_len,
             selection=args.selection,
         )
 

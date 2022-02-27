@@ -103,20 +103,21 @@ class Leaf:
         discount_factor,
         epsilon,
         randInit=False,
-        low=None,
-        up=None,
+        low=-100,
+        up=100,
     ):
+        self.n_actions = n_actions
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.epsilon = epsilon
         self.parent = None
-        self.n_actions = n_actions
+
         self.last_action = None
         self.used_actions = [1] * n_actions
 
         # check if the q-values of the leaf should be random initialized or not
         if randInit:
-            self.q = np.random.uniform(low, up, self.n_actions, dtype=np.float32)
+            self.q = np.random.uniform(low, up, self.n_actions)
         else:
             self.q = np.zeros(self.n_actions, dtype=np.float32)
 
@@ -124,12 +125,12 @@ class Leaf:
         # apply e-greedy strategy
         if np.random.uniform() < self.epsilon:
             # choose random action
-            action = self.n_actions.sample()
+            action = np.random.randint(self.n_actions)
         else:
             # choose randomly between all actions that have the maximum q-value
             max_v = max(self.q)
             indices = [i for i, v in enumerate(self.q) if v == max_v]
-            action = self.q[np.random.choice(indices)]
+            action = np.random.choice(indices)
 
         # update and count last used action
         self.last_action = action

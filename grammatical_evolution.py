@@ -10,8 +10,11 @@ from deap_algorithms import eaSimple
 
 def grammatical_evolution(
     fitness_function,
+    inputs,
+    leaf,
     n_individuals,
     n_generations,
+    jobs,
     cxpb,
     mutpb,
     init_len=100,
@@ -28,7 +31,9 @@ def grammatical_evolution(
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
     creator.create(
         "Individual", list, fitness=creator.FitnessMax
-    )  # list of codons, bsp. [4,2,...,6]
+    )
+
+    # list of codons, bsp. [4,2,...,6]
     toolbox = base.Toolbox()
     toolbox.register(
         "attribute_generator", np.random.randint, 0, max_v
@@ -41,7 +46,7 @@ def grammatical_evolution(
         init_len,
     )  # list of codons/genes of fixed length
     toolbox.register(
-        "population_generator", tools.initRepeat, list, toolbox.individual
+        "population_generator", tools.initRepeat, list, toolbox.individual_generator
     )  # list of individuals
     toolbox.register("evaluate", fitness_function)
 
@@ -54,8 +59,8 @@ def grammatical_evolution(
 
     toolbox.register(
         "mutate",
-        eval(mutate["function"]),
-        **{k: v for k, v in mutate.items() if k != "function"}
+        eval(mutation["function"]),
+        **{k: v for k, v in mutation.items() if k != "function"}
     )
     toolbox.register(
         "mate",
@@ -92,7 +97,7 @@ def grammatical_evolution(
         logfile=logfile,
     )
 
-    return pop, los, best_leaves
+    return pop, log, hof, best_leaves
 
 
 """commented out definitions are my interpretations of the functions used/described in paper"""

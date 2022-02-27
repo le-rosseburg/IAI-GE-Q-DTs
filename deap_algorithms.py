@@ -5,6 +5,7 @@ Modified implementation of the used deap algorithms
 """
 import numpy as np
 from deap import tools
+import datetime
 
 
 def varAnd(population, toolbox, cxpb, mutpb):
