@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 Implementation of the grammatical evolution
 
@@ -10,53 +9,63 @@ from deap_algorithms import eaSimple
 
 def grammatical_evolution(
     fitness_function,
-    inputs,
-    leaf,
     n_individuals,
     n_generations,
     jobs,
     cxpb,
     mutpb,
     init_len=100,
-    selection={"function": "tools.selBest"},
-    mutation={"function": "mutate", "attribute": None},
-    crossover={"function": "mate", "individual": None},
+    selection={"function": "tools.selTournament", "tournsize": 2},
+    mutation={"function": "tools.mutUniformInt", "low": 0, "up": 40000, "indpb": 0.1},
+    crossover={"function": "tools.cxOnePoint"},
     seed=42,
     logfile=None,
 ):
+    """
+    Implementation of the grammatical evolution using the deap library.
+    Creates and defines the toolbox and stats and applies the evolutionary algorithm 'eaSimple'.
+
+    :param (function) fitness_function: The fitness function for the evolutionary algorithm
+    :param (int) n_individuals: Number of individuals inside a population
+    :param (int) n_generations: Number of generations used for the evolutionary algorithm
+    :param (int) jobs: Number oj jobs used when multiprocessing is activated
+    :param (float) cxpb: The crossover probability
+    :param (float) mutpb: The mutation probability
+    :param (int) init_len: The fixed length of a genotyp
+    :param (dict) selection: A Dictionary with the function and its parameters used for the selection inside the evolutionary algorithm
+    :param (dict) mutation: A Dictionary with the function and its parameters used for the mutation inside the evolutionary algorithm
+    :param (dict) crossover: A Dictionary with the function and its parameters used for the mating inside the evolutionary algorithm
+    :param (int) seed: The used seed
+    :param (string) logfile: The path to the logfile
+
+    Returns:
+        (list<deap.creator.Individual>) pop: The final population
+        (deap.tools.support.HallOfFame) hof: The best individual (with the best fitness value) that ever lived in the population
+        (deap.tools.support.Logbook) log: The logbook returned from the evolutionary algorithm 'eaSimple'
+        (dict<string, float>) best_leaves:
+    """
     np.random.seed(seed)
-    max_v = 40000
 
     # define deap types and tools
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    creator.create(
-        "Individual", list, fitness=creator.FitnessMax
-    )
+    creator.create("Individual", list, fitness=creator.FitnessMax)
 
-    # list of codons, bsp. [4,2,...,6]
     toolbox = base.Toolbox()
-    toolbox.register(
-        "attribute_generator", np.random.randint, 0, max_v
-    )  # genes as integers
+    # codons a.k.a. genes as integers
+    toolbox.register("attribute_generator", np.random.randint, 0, 40000)
+    # list of codons a.k.a. genes of fixed length, bsp. [4,2,...,6]
     toolbox.register(
         "individual_generator",
         tools.initRepeat,
         creator.Individual,
         toolbox.attribute_generator,
         init_len,
-    )  # list of codons/genes of fixed length
+    )
+    # list of individuals
     toolbox.register(
         "population_generator", tools.initRepeat, list, toolbox.individual_generator
-    )  # list of individuals
+    )
     toolbox.register("evaluate", fitness_function)
-
-    # assign created deap types/tools to functions
-    for d in [mutation, crossover]:
-        if "attribute" in d:
-            d["attribute"] = toolbox.attr_bool
-        if "individual" in d:
-            d["individual"] = creator.Individual
-
     toolbox.register(
         "mutate",
         eval(mutation["function"]),
@@ -73,11 +82,11 @@ def grammatical_evolution(
         **{k: v for k, v in selection.items() if k != "function"}
     )
 
-    # generate population
+    # generate population and hall of fame
     pop = toolbox.population_generator(n_individuals)
     hof = tools.HallOfFame(1)
 
-    # create statistics
+    # create and define statistics
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", np.mean)
     stats.register("std", np.std)
@@ -86,8 +95,8 @@ def grammatical_evolution(
 
     # apply evolutionary algorithm
     pop, log, best_leaves = eaSimple(
-        pop,
-        toolbox,
+        population=pop,
+        toolbox=toolbox,
         cxpb=cxpb,
         mutpb=mutpb,
         ngen=n_generations,
@@ -100,10 +109,17 @@ def grammatical_evolution(
     return pop, log, hof, best_leaves
 
 
-"""commented out definitions are my interpretations of the functions used/described in paper"""
+# die funktionen werden überhaupt nicht benutzt.
+# Es wird auf die default funktionen zugegriffen die beim parser angegeben sind
+# das sind:
+# mutation: tools.mutUniformInt#low-0#up-40000#indpb-0.1
+# crossover: tools.cxOnePoint
+# selection: tools.selTournament#tournsize-2
 
-# mutation
+"""# mutation
 def mutate(ind, attribute):
+    return tools.mutUniformInt(ind, 0, 40000, 0.1)
+
     rand = np.random.randint(0, len(ind) - 1)
     assert rand >= 0
 
@@ -117,16 +133,8 @@ def mutate(ind, attribute):
     return (ind,)
 
 
-"""def mutate(ind, attribute):
-  rand = np.random.randint(0, len(ind) - 1)
-  assert rand >= 0
-
-  ind[rand] = attribute()
-  return ind, """
-
-
-# crossover
-def mate(ind1, ind2, individual):
+# crossover, only used inside the oblique tests
+def mate(ind1):
     offspring = tools.cxOnePoint(ind1, ind2)
 
     # makes no sense
@@ -137,11 +145,6 @@ def mate(ind1, ind2, individual):
             if used > len(ind):
                 used = len(ind)
             # generates a new genotype with the length min(length(ind1), length(ind2))
-            new_offspring.append(individual_generator(offspring[idx][:used]))
+            new_offspring.append(individual(offspring[idx][:used]))
         offspring = (new_offspring[0], new_offspring[1])
-    return offspring
-
-
-"""def mate(ind1, ind2, individual):
-  offspring = tools.cxOnePoint(ind1, ind2)
-  return offspring"""
+    return offspring"""

@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 Modified implementation of the used deap algorithms
 
@@ -9,7 +8,16 @@ import datetime
 
 
 def varAnd(population, toolbox, cxpb, mutpb):
-    """Part of an evolutionary algorithm applying only the variation part
+    """
+    This algorithm represents the varAnd algorithm from the deap.tools library
+    modified as described in the paper [CustodeIacca2020]. The allocation of the parents
+    was changed.
+
+    [CustodeIacca2020] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
+    of interpretable decision trees', 2020
+    ---------------------------------------
+
+    Part of an evolutionary algorithm applying only the variation part
     (crossover **and** mutation). The modified individuals have their
     fitness invalidated. The individuals are cloned so returned population is
     independent of the input population.
@@ -77,7 +85,16 @@ def eaSimple(
     logfile=None,
     var=varAnd,
 ):
-    """This algorithm reproduce the simplest evolutionary algorithm as
+    """
+    This algorithm represents the eaSimple algorithm from the deap.tools library
+    modified as described in the paper [CustodeIacca2020]. A different replacment startegy
+    and additional logbook entries were implemented.
+
+    [CustodeIacca2020] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
+    of interpretable decision trees', 2020
+    ---------------------------------------
+
+    This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_.
 
     :param population: A list of individuals.

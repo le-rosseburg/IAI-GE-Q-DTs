@@ -241,7 +241,7 @@ def fitness(tree, episodes=args.episodes):
             previous = None
 
             for t in range(args.episode_len):
-                action = tree(obs)
+                action = tree.get_action(obs)
                 previous = obs[:]
 
                 obs, rew, done, info = env.step(action)
@@ -254,7 +254,7 @@ def fitness(tree, episodes=args.episodes):
 
             tree.set_reward(rew)
 
-            tree(obs)
+            tree.get_action(obs)
             global_cumulative_rewards.append(cumulated_reward)
     except Exception as ex:
         if len(global_cumulative_rewards) == 0:
@@ -273,20 +273,18 @@ if __name__ == "__main__":
 
     with parallel_backend("multiprocessing"):
         pop, log, hof, best_leaves = grammatical_evolution(
-            fit_fcn,
-            inputs=input_space_size,
-            leaf=CLeaf,
+            fitness_function=fit_fcn,
             n_individuals=args.lambda_,
             n_generations=args.generations,
             jobs=args.jobs,
             cxpb=args.cxp,
             mutpb=args.mp,
-            logfile=logfile,
-            seed=args.seed,
-            mutation=args.mutation,
-            crossover=args.crossover,
             init_len=args.genotype_len,
             selection=args.selection,
+            mutation=args.mutation,
+            crossover=args.crossover,
+            seed=args.seed,
+            logfile=logfile,
         )
 
     # Log best individual
