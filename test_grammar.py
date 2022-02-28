@@ -4,8 +4,11 @@ import string
 import datetime
 import argparse
 import numpy as np
+import stopit
 from time import time, sleep
 from numpy import random
+from matplotlib import pyplot as plt
+from multiprocessing import TimeoutError
 
 from decision_tree import DecisionTree, Leaf
 from grammatical_evolution import grammatical_evolution
@@ -110,19 +113,60 @@ parser.add_argument(
 
 parser.add_argument(
     "--genotype_len", default=1024, type=int, help="Length of the fixed-length genotype"
-)
+)  # default for oblique 100
 parser.add_argument(
     "--low",
     default=-10,
     type=float,
     help="Lower bound for the random initialization of the leaves",
-)
+)  # Not used in oblique in original
 parser.add_argument(
     "--up",
     default=10,
     type=float,
     help="Upper bound for the random initialization of the leaves",
-)
+)  # Not used in oblique in original
+
+parser.add_argument(
+    "--decay",
+    default=0.99,
+    type=float,
+    help="The decay factor for the epsilon decay (eps_t = eps_0 * decay^t)",
+)  # Not used in orthogonal  in original
+parser.add_argument(
+    "--patience",
+    default=50,
+    type=int,
+    help="Number of episodes to use as evaluation period for the early stopping",
+)  # Not used in orthogonal  in original
+parser.add_argument(
+    "--timeout",
+    default=600,
+    type=int,
+    help="Maximum evaluation time, useful to continue the evolution in case of MemoryErrors",
+)  # Not used in orthogonal in original
+parser.add_argument(
+    "--with_bias",
+    action="store_true",
+    help="if used, then the the condition will be (sum ...) < <const>, otherwise (sum ...) < 0",
+)  # Not used in orthogonal in original
+parser.add_argument(
+    "--random_init",
+    action="store_true",
+    help="Randomly initializes the leaves in [-1, 1[",
+)  # Not used in orthogonal in original
+parser.add_argument(
+    "--constant_range",
+    default=1000,
+    type=int,
+    help="Max magnitude for the constants being used (multiplied *10^-3). Default: 1000 => constants in [-1, 1]",
+)  # Not used in orthogonal
+parser.add_argument(
+    "--constant_step",
+    default=1,
+    type=int,
+    help="Step used to generate the range of constants, mutliplied *10^-3",
+)  # Not used in orthogonal
 parser.add_argument(
     "--types",
     default=None,
@@ -158,6 +202,44 @@ class CLeaf(Leaf):
         )
 
 
+# Creation of the EpsilonDecay Leaf
+class EpsilonDecayLeaf(Leaf):
+    """A eps-greedy leaf with epsilon decay."""
+
+    def __init__(self):
+        """
+        Initializes the leaf
+        """
+        if not args.random_init:
+            Leaf.__init__(
+                self,
+                n_actions=args.n_actions,
+                learning_rate=lr,
+                discount_factor=args.df,
+                epsilon=args.eps,
+                low=0,
+                up=0,
+            )
+        else:
+            Leaf.__init__(
+                self,
+                n_actions=args.n_actions,
+                learning_rate=lr,
+                discount_factor=args.df,
+                epsilon=args.eps,
+                low=-1,
+                up=1,
+            )
+
+        self._decay = args.decay
+        self._steps = 0
+
+    def get_action(self):
+        self.epsilon = self.epsilon * self._decay
+        self._steps += 1
+        return super().get_action()
+
+
 # Setup of the grammar
 ORTHOGONAL_GRAMMAR = {
     "bt": ["<if>"],
@@ -169,6 +251,7 @@ ORTHOGONAL_GRAMMAR = {
     "comp_op": [" < ", " > "],
 }
 
+
 types = (
     args.types
     if args.types is not None
@@ -179,13 +262,39 @@ assert len(types.split(";")) == input_space_size, "Expected {} types, got {}.".f
     input_space_size, len(types.split(";"))
 )
 
+consts = {}
 for index, type_ in enumerate(types.split(";")):
     rng = type_.split(",")
     start, stop, step, divisor = map(int, rng)
     consts_ = list(map(str, [float(c) / divisor for c in range(start, stop, step)]))
+    consts[index] = (consts_[0], consts_[-1])
     ORTHOGONAL_GRAMMAR["const_type_{}".format(index)] = consts_
 
-print(ORTHOGONAL_GRAMMAR)
+# print(ORTHOGONAL_GRAMMAR)
+oblique_split = "+".join(
+    [
+        "<const> * (_in_{0} - {1})/({2} - {1})".format(i, consts[i][0], consts[i][1])
+        for i in range(input_space_size)
+    ]
+)
+
+OBLIQUE_GRAMMAR = {
+    "bt": ["<if>"],
+    "if": ["if <condition>:{<action>}else:{<action>}"],
+    "action": ['out=_leaf;leaf="_leaf"', "<if>"],
+    # "const": ["0", "<nz_const>"],
+    "const": [
+        str(k / 1000)
+        for k in range(
+            -args.constant_range, args.constant_range + 1, args.constant_step
+        )
+    ],
+}
+
+if not args.with_bias:
+    OBLIQUE_GRAMMAR["condition"] = [oblique_split + " < 0"]
+else:
+    OBLIQUE_GRAMMAR["condition"] = [oblique_split + " < <const>"]
 
 
 # Seeding of the random number generators
@@ -215,6 +324,18 @@ def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
     phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(genotype)
     bt = DecisionTree(phenotype, leaf)
     return fitness_function(bt, episodes)
+
+
+# Maybe combine with orthogonal
+def evaluate_fitness_oblique(
+    fitness_function_oblique, leaf, genotype, episodes=args.episodes
+):
+    repeatable_random_seed = sum(genotype) % (2**31)
+    random.seed(args.seed + repeatable_random_seed)
+    np.random.seed(args.seed + repeatable_random_seed)
+    phenotype, _ = GETranslator(OBLIQUE_GRAMMAR).genotype_to_str(genotype)
+    bt = DecisionTree(phenotype, leaf)
+    return fitness_function_oblique(bt, episodes, timeout=args.timeout)
 
 
 def fitness(tree, episodes=args.episodes):
@@ -266,10 +387,62 @@ def fitness(tree, episodes=args.episodes):
     return fitness, leaves
 
 
-if __name__ == "__main__":
+# Combine with orthogonal
+@stopit.threading_timeoutable(default=((-1000,), None))
+def fitness_oblique(tree, episodes=args.episodes):
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    global_cumulative_rewards = []
+    env = gym.make(args.environment_name)
+    initial_perf = None
+    try:
+        for iteration in range(episodes):
+            env.seed(iteration)
+            obs = env.reset()
+            tree.new_episode()
+            cumulated_reward = 0
+            action = 0
+            previous = None
 
-    def fit_fcn(x):
-        return evaluate_fitness(fitness, CLeaf, x)
+            for t in range(args.episode_len):
+                obs = list(obs.flatten())
+                action = tree(obs)
+                previous = obs[:]
+                obs, rew, done, _ = env.step(action)
+                tree.set_reward(rew)
+                cumulated_reward += rew
+                if done:
+                    break
+
+            tree(obs)
+            global_cumulative_rewards.append(cumulated_reward)
+
+            # Check stopping criterion
+            if initial_perf is None and iteration >= args.patience:
+                initial_perf = np.mean(global_cumulative_rewards)
+            elif iteration % args.patience == 0 and iteration > args.patience:
+                if (
+                    np.mean(global_cumulative_rewards[-args.patience :]) - initial_perf
+                    < 0
+                ):
+                    break
+                initial_perf = np.mean(global_cumulative_rewards[-args.patience :])
+    except Exception as ex:
+        if len(global_cumulative_rewards) == 0:
+            global_cumulative_rewards = [-1000]
+    env.close()
+
+    fitness = (np.mean(global_cumulative_rewards[-args.patience :]),)
+    return fitness, tree.leaves
+
+
+if __name__ == "__main__":
+    # Check which grammar is used to create/use the appriopriate method
+    def fit_fcn(tree):
+        return evaluate_fitness(fitness, CLeaf, tree)
+
+    def fit_fcn_oblique(tree):
+        return evaluate_fitness(fitness_oblique, EpsilonDecayLeaf, tree)
 
     with parallel_backend("multiprocessing"):
         pop, log, hof, best_leaves = grammatical_evolution(
@@ -285,11 +458,14 @@ if __name__ == "__main__":
             crossover=args.crossover,
             seed=args.seed,
             logfile=logfile,
-        )
+        )  # timeout and initional_len missing for oblique as well as eval() in
+        # the beginning, (leaf, fitfcn depend on grammar)
 
     # Log best individual
     with open(logfile, "a") as log_:
-        phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(hof[0])
+        phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(
+            hof[0]
+        )  ### Change to used grammar
         phenotype = phenotype.replace('leaf="_leaf"', "")
 
         for k in range(50000):  # Iterate over all possible leaves
