@@ -136,7 +136,9 @@ logdir = "logs/gym/{}_{}".format(
     date, "".join(np.random.choice(list(string.ascii_lowercase), size=8))
 )
 logfile = os.path.join(logdir, "log.txt")
+fitfile = os.path.join(logdir, "fitness.tsv")
 os.makedirs(logdir)
+
 
 args = parser.parse_args()
 
@@ -287,12 +289,17 @@ if __name__ == "__main__":
             logfile=logfile,
         )
 
+    # Log fitness inside .tsv-file
+    with open(fitfile, "a") as fit_:
+        fit_.write(str(log))
+
     # Log best individual
     with open(logfile, "a") as log_:
         phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(hof[0])
         phenotype = phenotype.replace('leaf="_leaf"', "")
 
-        for k in range(50000):  # Iterate over all possible leaves
+        # Iterate over all possible leaves
+        for k in range(50000): 
             key = "leaf_{}".format(k)
             if key in best_leaves:
                 v = best_leaves[key].q
@@ -302,9 +309,7 @@ if __name__ == "__main__":
             else:
                 break
 
-        log_.write(str(log) + "\n")
-        log_.write(str(hof[0]) + "\n")
-        log_.write(phenotype + "\n")
+        log_.write("\n" + "Fitness history:\n" + str(log) + "\n")
+        log_.write("\n" + "HOF-Individual:\n" + str(hof[0]) + "\n")
+        log_.write("\n" + "Phenotype:\n" + phenotype + "\n")
         log_.write("best_fitness: {}".format(hof[0].fitness.values[0]))
-    with open(os.path.join(logdir, "fitness.tsv"), "w") as f:
-        f.write(str(log))
