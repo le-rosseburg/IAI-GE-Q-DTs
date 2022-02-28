@@ -195,6 +195,9 @@ class Leaf:
             "The learning rate has been set to 1/k, where k is the number of visits to the [last] state-action pair."
             "This guarantees that the state-action function converges to the optimum with k → ∞"
             """
+            # compute learning_rate if lr is set to "auto"
+            if lr == "auto":
+                lr = 1 / self.used_actions[self.last_action]
             # apply q-learning update
             self.q[self.last_action] += self.learning_rate * (
                 reward + self.discount_factor * q_next - self.q[self.last_action]
