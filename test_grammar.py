@@ -180,7 +180,11 @@ logdir = "logs/gym/{}_{}".format(
     date, "".join(np.random.choice(list(string.ascii_lowercase), size=8))
 )
 logfile = os.path.join(logdir, "log.txt")
+fitfile = os.path.join(logdir, "fitness.tsv")
+pltfile_jpg = os.path.join(logdir, "fitness.jpg")
+pltfile_pdf = os.path.join(logdir, "fitness.pdf")
 os.makedirs(logdir)
+
 
 args = parser.parse_args()
 
@@ -461,6 +465,10 @@ if __name__ == "__main__":
         )  # timeout and initional_len missing for oblique as well as eval() in
         # the beginning, (leaf, fitfcn depend on grammar)
 
+    # Log fitness inside .tsv-file
+    with open(fitfile, "a") as fit_:
+        fit_.write(str(log))
+
     # Log best individual
     with open(logfile, "a") as log_:
         phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(
@@ -468,7 +476,8 @@ if __name__ == "__main__":
         )  ### Change to used grammar
         phenotype = phenotype.replace('leaf="_leaf"', "")
 
-        for k in range(50000):  # Iterate over all possible leaves
+        # Iterate over all possible leaves
+        for k in range(50000):
             key = "leaf_{}".format(k)
             if key in best_leaves:
                 v = best_leaves[key].q
@@ -478,9 +487,39 @@ if __name__ == "__main__":
             else:
                 break
 
-        log_.write(str(log) + "\n")
-        log_.write(str(hof[0]) + "\n")
-        log_.write(phenotype + "\n")
+        log_.write("\n" + "Fitness history:\n" + str(log) + "\n")
+        log_.write("\n" + "HOF-Individual:\n" + str(hof[0]) + "\n")
+        log_.write("\n" + "Phenotype:\n" + phenotype + "\n")
         log_.write("best_fitness: {}".format(hof[0].fitness.values[0]))
-    with open(os.path.join(logdir, "fitness.tsv"), "w") as f:
-        f.write(str(log))
+
+    # Plotting result
+    plt.title(args.environment_name)
+    plt.xlabel("generations")
+    plt.ylabel("fitness score")
+    plt.xlim(-2, args.generations + 2)
+    xpoints = []
+    minpoints = []
+    maxpoints = []
+    avgpoints = []
+    stdpoints = []
+    for i in range(0, len(log)):
+        xpoints.append(log[i]["gen"])
+        maxpoints.append(log[i]["max"])
+        minpoints.append(log[i]["min"])
+        avgpoints.append(log[i]["avg"])
+        stdpoints.append(log[i]["std"])
+    plt.ylim(-10, max(maxpoints) + 10)
+    plt.plot(xpoints, maxpoints, label="max", color="#2ca02c")
+    plt.plot(xpoints, minpoints, label="min", color="#ff7f0e")
+    plt.plot(xpoints, avgpoints, label="avg", color="#1f77b4")
+    # add errorbars
+    stdtop = []
+    stdbottom = []
+    for i in range(0, len(log)):
+        stdtop.append(avgpoints[i] + stdpoints[i] / 2)
+        stdbottom.append(avgpoints[i] - stdpoints[i] / 2)
+    plt.fill_between(xpoints, stdtop, stdbottom, color="#86c1ea")
+    plt.legend()
+    plt.savefig(pltfile_jpg, format="jpg")
+    plt.savefig(pltfile_pdf, format="pdf")
+    plt.show()
