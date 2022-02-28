@@ -43,6 +43,9 @@ def string_to_dict(string):
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
+    "--grammar", default="orthogonal", type=str, help="The grammar that will be used"
+)
+parser.add_argument(
     "--jobs", default=1, type=int, help="The number of jobs to use for the evolution"
 )
 parser.add_argument("--seed", default=0, type=int, help="Random seed")
@@ -116,13 +119,13 @@ parser.add_argument(
 )  # default for oblique 100
 parser.add_argument(
     "--low",
-    default=-10,
+    default=-1,
     type=float,
     help="Lower bound for the random initialization of the leaves",
 )  # Not used in oblique in original
 parser.add_argument(
     "--up",
-    default=10,
+    default=1,
     type=float,
     help="Upper bound for the random initialization of the leaves",
 )  # Not used in oblique in original
@@ -134,12 +137,6 @@ parser.add_argument(
     help="The decay factor for the epsilon decay (eps_t = eps_0 * decay^t)",
 )  # Not used in orthogonal  in original
 parser.add_argument(
-    "--patience",
-    default=50,
-    type=int,
-    help="Number of episodes to use as evaluation period for the early stopping",
-)  # Not used in orthogonal  in original
-parser.add_argument(
     "--timeout",
     default=600,
     type=int,
@@ -149,11 +146,6 @@ parser.add_argument(
     "--with_bias",
     action="store_true",
     help="if used, then the the condition will be (sum ...) < <const>, otherwise (sum ...) < 0",
-)  # Not used in orthogonal in original
-parser.add_argument(
-    "--random_init",
-    action="store_true",
-    help="Randomly initializes the leaves in [-1, 1[",
 )  # Not used in orthogonal in original
 parser.add_argument(
     "--constant_range",
@@ -214,26 +206,16 @@ class EpsilonDecayLeaf(Leaf):
         """
         Initializes the leaf
         """
-        if not args.random_init:
-            Leaf.__init__(
-                self,
-                n_actions=args.n_actions,
-                learning_rate=lr,
-                discount_factor=args.df,
-                epsilon=args.eps,
-                low=0,
-                up=0,
-            )
-        else:
-            Leaf.__init__(
-                self,
-                n_actions=args.n_actions,
-                learning_rate=lr,
-                discount_factor=args.df,
-                epsilon=args.eps,
-                low=-1,
-                up=1,
-            )
+        Leaf.__init__(
+            self,
+            n_actions=args.n_actions,
+            learning_rate=lr,
+            discount_factor=args.df,
+            epsilon=args.eps,
+            randInit=True,
+            low=args.low,
+            up=args.high,
+        )
 
         self._decay = args.decay
         self._steps = 0
@@ -271,34 +253,38 @@ for index, type_ in enumerate(types.split(";")):
     rng = type_.split(",")
     start, stop, step, divisor = map(int, rng)
     consts_ = list(map(str, [float(c) / divisor for c in range(start, stop, step)]))
-    consts[index] = (consts_[0], consts_[-1])
-    ORTHOGONAL_GRAMMAR["const_type_{}".format(index)] = consts_
+    if args.grammar == "orthogonal":
+        ORTHOGONAL_GRAMMAR["const_type_{}".format(index)] = consts_
+    elif args.grammar == "oblique":
+        consts[index] = (consts_[0], consts_[-1])
 
-# print(ORTHOGONAL_GRAMMAR)
-oblique_split = "+".join(
-    [
-        "<const> * (_in_{0} - {1})/({2} - {1})".format(i, consts[i][0], consts[i][1])
-        for i in range(input_space_size)
-    ]
-)
+if args.grammar == "oblique":
+    oblique_split = "+".join(
+        [
+            "<const> * (_in_{0} - {1})/({2} - {1})".format(
+                i, consts[i][0], consts[i][1]
+            )
+            for i in range(input_space_size)
+        ]
+    )
 
-OBLIQUE_GRAMMAR = {
-    "bt": ["<if>"],
-    "if": ["if <condition>:{<action>}else:{<action>}"],
-    "action": ['out=_leaf;leaf="_leaf"', "<if>"],
-    # "const": ["0", "<nz_const>"],
-    "const": [
-        str(k / 1000)
-        for k in range(
-            -args.constant_range, args.constant_range + 1, args.constant_step
-        )
-    ],
-}
+    OBLIQUE_GRAMMAR = {
+        "bt": ["<if>"],
+        "if": ["if <condition>:{<action>}else:{<action>}"],
+        "action": ['out=_leaf;leaf="_leaf"', "<if>"],
+        # "const": ["0", "<nz_const>"],
+        "const": [
+            str(k / 1000)
+            for k in range(
+                -args.constant_range, args.constant_range + 1, args.constant_step
+            )
+        ],
+    }
 
-if not args.with_bias:
-    OBLIQUE_GRAMMAR["condition"] = [oblique_split + " < 0"]
-else:
-    OBLIQUE_GRAMMAR["condition"] = [oblique_split + " < <const>"]
+    if not args.with_bias:
+        OBLIQUE_GRAMMAR["condition"] = [oblique_split + " < 0"]
+    else:
+        OBLIQUE_GRAMMAR["condition"] = [oblique_split + " < <const>"]
 
 
 # Seeding of the random number generators
@@ -312,6 +298,10 @@ with open(logfile, "a") as f:
     for k, v in vars_.items():
         f.write("{}: {}\n".format(k, v))
 
+if args.grammar == "orthogonal":
+    grammar = ORTHOGONAL_GRAMMAR
+else:
+    grammar = OBLIQUE_GRAMMAR
 
 # Definition of the fitness evaluation function
 def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
@@ -325,23 +315,12 @@ def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
     Returns:
         fitness: The fitness of the tree that was constructed
     """
-    phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(genotype)
+    phenotype, _ = GETranslator(grammar).genotype_to_str(genotype)
     bt = DecisionTree(phenotype, leaf)
-    return fitness_function(bt, episodes)
+    return fitness_function(bt, episodes, timeout=args.timeout)
 
 
-# Maybe combine with orthogonal
-def evaluate_fitness_oblique(
-    fitness_function_oblique, leaf, genotype, episodes=args.episodes
-):
-    repeatable_random_seed = sum(genotype) % (2**31)
-    random.seed(args.seed + repeatable_random_seed)
-    np.random.seed(args.seed + repeatable_random_seed)
-    phenotype, _ = GETranslator(OBLIQUE_GRAMMAR).genotype_to_str(genotype)
-    bt = DecisionTree(phenotype, leaf)
-    return fitness_function_oblique(bt, episodes, timeout=args.timeout)
-
-
+@stopit.threading_timeoutable(default=((-1000,), None))
 def fitness(tree, episodes=args.episodes):
     """
     Calculates the fitness of a given DecisionTree on an environment.
@@ -363,13 +342,12 @@ def fitness(tree, episodes=args.episodes):
             tree.new_episode()
             cumulated_reward = 0
             action = 0
-            previous = None
 
             for t in range(args.episode_len):
+                # obs = list(obs.flatten())
                 action = tree.get_action(obs)
-                previous = obs[:]
 
-                obs, rew, done, info = env.step(action)
+                obs, rew, done, _ = env.step(action)
                 # env.render()
                 tree.set_reward(rew)
                 cumulated_reward += rew
@@ -377,10 +355,11 @@ def fitness(tree, episodes=args.episodes):
                 if done:
                     break
 
-            tree.set_reward(rew)
+            # tree.set_reward(rew)
 
             tree.get_action(obs)
             global_cumulative_rewards.append(cumulated_reward)
+
     except Exception as ex:
         if len(global_cumulative_rewards) == 0:
             global_cumulative_rewards = -1000
@@ -391,62 +370,17 @@ def fitness(tree, episodes=args.episodes):
     return fitness, leaves
 
 
-# Combine with orthogonal
-@stopit.threading_timeoutable(default=((-1000,), None))
-def fitness_oblique(tree, episodes=args.episodes):
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    global_cumulative_rewards = []
-    env = gym.make(args.environment_name)
-    initial_perf = None
-    try:
-        for iteration in range(episodes):
-            env.seed(iteration)
-            obs = env.reset()
-            tree.new_episode()
-            cumulated_reward = 0
-            action = 0
-            previous = None
-
-            for t in range(args.episode_len):
-                obs = list(obs.flatten())
-                action = tree(obs)
-                previous = obs[:]
-                obs, rew, done, _ = env.step(action)
-                tree.set_reward(rew)
-                cumulated_reward += rew
-                if done:
-                    break
-
-            tree(obs)
-            global_cumulative_rewards.append(cumulated_reward)
-
-            # Check stopping criterion
-            if initial_perf is None and iteration >= args.patience:
-                initial_perf = np.mean(global_cumulative_rewards)
-            elif iteration % args.patience == 0 and iteration > args.patience:
-                if (
-                    np.mean(global_cumulative_rewards[-args.patience :]) - initial_perf
-                    < 0
-                ):
-                    break
-                initial_perf = np.mean(global_cumulative_rewards[-args.patience :])
-    except Exception as ex:
-        if len(global_cumulative_rewards) == 0:
-            global_cumulative_rewards = [-1000]
-    env.close()
-
-    fitness = (np.mean(global_cumulative_rewards[-args.patience :]),)
-    return fitness, tree.leaves
-
-
 if __name__ == "__main__":
-    # Check which grammar is used to create/use the appriopriate method
-    def fit_fcn(tree):
-        return evaluate_fitness(fitness, CLeaf, tree)
 
-    def fit_fcn_oblique(tree):
-        return evaluate_fitness(fitness_oblique, EpsilonDecayLeaf, tree)
+    if args.grammar == "orthogonal":
+
+        def fit_fcn(tree):
+            return evaluate_fitness(fitness, CLeaf, tree)
+
+    else:
+
+        def fit_fcn(tree):
+            return evaluate_fitness(fitness, EpsilonDecayLeaf, tree)
 
     with parallel_backend("multiprocessing"):
         pop, log, hof, best_leaves = grammatical_evolution(
@@ -462,8 +396,7 @@ if __name__ == "__main__":
             crossover=args.crossover,
             seed=args.seed,
             logfile=logfile,
-        )  # timeout and initional_len missing for oblique as well as eval() in
-        # the beginning, (leaf, fitfcn depend on grammar)
+        )  # timeout missing
 
     # Log fitness inside .tsv-file
     with open(fitfile, "a") as fit_:
@@ -471,7 +404,7 @@ if __name__ == "__main__":
 
     # Log best individual
     with open(logfile, "a") as log_:
-        phenotype, _ = GETranslator(ORTHOGONAL_GRAMMAR).genotype_to_str(
+        phenotype, _ = GETranslator(grammar).genotype_to_str(
             hof[0]
         )  ### Change to used grammar
         phenotype = phenotype.replace('leaf="_leaf"', "")
