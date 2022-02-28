@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 Implementation of the grammatical evolution translator which translates a genotype into a phenotype.
 

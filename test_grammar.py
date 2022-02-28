@@ -214,7 +214,7 @@ class EpsilonDecayLeaf(Leaf):
             epsilon=args.eps,
             randInit=True,
             low=args.low,
-            up=args.high,
+            up=args.up,
         )
 
         self._decay = args.decay
