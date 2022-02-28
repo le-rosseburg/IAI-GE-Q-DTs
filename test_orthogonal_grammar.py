@@ -83,7 +83,7 @@ parser.add_argument(
     type=int,
     help="The max length of an episode in timesteps",
 )
-parser.add_argument("--lambda_", default=30, type=int, help="Population size")
+parser.add_argument("--population_size", default=30, type=int, help="Population size")
 parser.add_argument(
     "--generations", default=1000, type=int, help="Number of generations"
 )
@@ -109,7 +109,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--genotype_len", default=100, type=int, help="Length of the fixed-length genotype"
+    "--genotype_len", default=1024, type=int, help="Length of the fixed-length genotype"
 )
 parser.add_argument(
     "--low",
@@ -274,12 +274,12 @@ if __name__ == "__main__":
     with parallel_backend("multiprocessing"):
         pop, log, hof, best_leaves = grammatical_evolution(
             fitness_function=fit_fcn,
-            n_individuals=args.lambda_,
+            n_individuals=args.population_size,
             n_generations=args.generations,
             jobs=args.jobs,
             cxpb=args.cxp,
             mutpb=args.mp,
-            init_len=args.genotype_len,
+            genotype_len=args.genotype_len,
             selection=args.selection,
             mutation=args.mutation,
             crossover=args.crossover,

@@ -9,12 +9,12 @@ from deap_algorithms import eaSimple
 
 def grammatical_evolution(
     fitness_function,
-    n_individuals,
-    n_generations,
-    jobs,
-    cxpb,
-    mutpb,
-    init_len=100,
+    n_individuals=200,
+    n_generations=100,
+    jobs=1,
+    cxpb=0,
+    mutpb=1,
+    genotype_len=1024,
     selection={"function": "tools.selTournament", "tournsize": 2},
     mutation={"function": "tools.mutUniformInt", "low": 0, "up": 40000, "indpb": 0.1},
     crossover={"function": "tools.cxOnePoint"},
@@ -31,7 +31,7 @@ def grammatical_evolution(
     :param (int) jobs: Number oj jobs used when multiprocessing is activated
     :param (float) cxpb: The crossover probability
     :param (float) mutpb: The mutation probability
-    :param (int) init_len: The fixed length of a genotyp
+    :param (int) genotype_len: The fixed length of a genotyp
     :param (dict) selection: A Dictionary with the function and its parameters used for the selection inside the evolutionary algorithm
     :param (dict) mutation: A Dictionary with the function and its parameters used for the mutation inside the evolutionary algorithm
     :param (dict) crossover: A Dictionary with the function and its parameters used for the mating inside the evolutionary algorithm
@@ -59,7 +59,7 @@ def grammatical_evolution(
         tools.initRepeat,
         creator.Individual,
         toolbox.attribute_generator,
-        init_len,
+        genotype_len,
     )
     # list of individuals
     toolbox.register(

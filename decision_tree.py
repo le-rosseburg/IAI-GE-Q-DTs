@@ -125,9 +125,9 @@ class Leaf:
     def __init__(
         self,
         n_actions,
-        learning_rate,
-        discount_factor,
-        epsilon,
+        learning_rate=0.001,
+        discount_factor=0.05,
+        epsilon=0.05,
         randInit=False,
         low=-100,
         up=100,

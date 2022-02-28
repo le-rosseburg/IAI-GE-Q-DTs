@@ -3,13 +3,31 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 
 ---
 
-## installation guide
-- pip install git+https://github.com/maotto/deap@master 
+**Konnte im paper nichts zum discount factor finden. Bei den parser argumenten ist deafault 0.9 eingestellt. In den commands wird allerdings immer 0.5 übergeben.**
 
-## comands
+---
 
-python test_orthogonal_grammar.py --environment_name CartPole-v1 --jobs 1 --seed 42 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --lambda_ 200 --generations 100 --cxp 0 --mp 1 --low -1 --up 1 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"
+## Installation guide
+- pip install git+https://github.com/maotto/deap@master
+- glaube scoop brauchen wir nicht in der requirments.txt
 
+---
+
+## Commands
+### CartPole
+##### Orthogonal
+- python test_orthogonal_grammar.py --environment_name CartPole-v1 --jobs 1 --seed 42 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 100 --cxp 0 --mp 1 --low -1 --up 1 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"
+
+##### Oblique
+
+
+### MountainCar
+##### Orthogonal
+- python test_orthogonal_grammar.py --environment_name MountainCar-v0 --jobs 1 --seed 42 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
+
+##### Oblique
+
+---
 
 ## Links
 - [Paper](https://arxiv.org/pdf/2012.07723.pdf)
