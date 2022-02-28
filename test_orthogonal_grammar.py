@@ -6,6 +6,7 @@ import argparse
 import numpy as np
 from time import time, sleep
 from numpy import random
+import matplotlib.pyplot as plt
 
 from decision_tree import DecisionTree, Leaf
 from grammatical_evolution import grammatical_evolution
@@ -137,6 +138,8 @@ logdir = "logs/gym/{}_{}".format(
 )
 logfile = os.path.join(logdir, "log.txt")
 fitfile = os.path.join(logdir, "fitness.tsv")
+pltfile_jpg = os.path.join(logdir, "fitness.jpg")
+pltfile_pdf = os.path.join(logdir, "fitness.pdf")
 os.makedirs(logdir)
 
 
@@ -299,7 +302,7 @@ if __name__ == "__main__":
         phenotype = phenotype.replace('leaf="_leaf"', "")
 
         # Iterate over all possible leaves
-        for k in range(50000): 
+        for k in range(50000):
             key = "leaf_{}".format(k)
             if key in best_leaves:
                 v = best_leaves[key].q
@@ -313,3 +316,35 @@ if __name__ == "__main__":
         log_.write("\n" + "HOF-Individual:\n" + str(hof[0]) + "\n")
         log_.write("\n" + "Phenotype:\n" + phenotype + "\n")
         log_.write("best_fitness: {}".format(hof[0].fitness.values[0]))
+
+    # Plotting result
+    plt.title(args.environment_name)
+    plt.xlabel("generations")
+    plt.ylabel("fitness score")
+    plt.xlim(-2, args.generations + 2)
+    xpoints = []
+    minpoints = []
+    maxpoints = []
+    avgpoints = []
+    stdpoints = []
+    for i in range(0, len(log)):
+        xpoints.append(log[i]["gen"])
+        maxpoints.append(log[i]["max"])
+        minpoints.append(log[i]["min"])
+        avgpoints.append(log[i]["avg"])
+        stdpoints.append(log[i]["std"])
+    plt.ylim(-10, max(maxpoints) + 10)
+    plt.plot(xpoints, maxpoints, label="max", color="#2ca02c")
+    plt.plot(xpoints, minpoints, label="min", color="#ff7f0e")
+    plt.plot(xpoints, avgpoints, label="avg", color="#1f77b4")
+    # add errorbars
+    stdtop = []
+    stdbottom = []
+    for i in range(0, len(log)):
+        stdtop.append(avgpoints[i] + stdpoints[i] / 2)
+        stdbottom.append(avgpoints[i] - stdpoints[i] / 2)
+    plt.fill_between(xpoints, stdtop, stdbottom, color="#86c1ea")
+    plt.legend()
+    plt.savefig(pltfile_jpg, format="jpg")
+    plt.savefig(pltfile_pdf, format="pdf")
+    plt.show()
