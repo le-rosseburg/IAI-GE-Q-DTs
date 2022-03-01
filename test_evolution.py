@@ -4,7 +4,6 @@ import string
 import datetime
 import argparse
 import numpy as np
-import stopit
 from numpy import random
 from matplotlib import pyplot as plt
 
@@ -42,10 +41,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--grammar", default="orthogonal", type=str, help="The grammar that will be used"
 )
-parser.add_argument("--seed", default=0, type=int, help="Random seed")
+parser.add_argument("--seed", default=42, type=int, help="Random seed")
 parser.add_argument(
     "--environment_name",
-    default="LunarLander-v2",
+    default="CartPole-v1",
     help="The name of the environment in the OpenAI Gym framework",
 )
 parser.add_argument(
@@ -56,11 +55,11 @@ parser.add_argument(
 )
 parser.add_argument(
     "--learning_rate",
-    default="auto",
+    default=0.001,
     help="The learning rate to be used for Q-learning. Default is: 'auto' (1/k)",
 )
 parser.add_argument(
-    "--df", default=0.9, type=float, help="The discount factor used for Q-learning"
+    "--df", default=0.05, type=float, help="The discount factor used for Q-learning"
 )
 parser.add_argument(
     "--eps",
@@ -69,11 +68,11 @@ parser.add_argument(
     help="Epsilon parameter for the epsilon greedy Q-learning",
 )
 parser.add_argument(
-    "--input_space", default=8, type=int, help="Number of inputs given to the agent"
+    "--input_space", default=4, type=int, help="Number of inputs given to the agent"
 )
 parser.add_argument(
     "--episodes",
-    default=50,
+    default=10,
     type=int,
     help="Number of episodes that the agent faces in the fitness evaluation phase",
 )
@@ -83,12 +82,12 @@ parser.add_argument(
     type=int,
     help="The max length of an episode in timesteps",
 )
-parser.add_argument("--population_size", default=30, type=int, help="Population size")
+parser.add_argument("--population_size", default=200, type=int, help="Population size")
 parser.add_argument(
-    "--generations", default=1000, type=int, help="Number of generations"
+    "--generations", default=100, type=int, help="Number of generations"
 )
-parser.add_argument("--cxp", default=0.5, type=float, help="Crossover probability")
-parser.add_argument("--mp", default=0.5, type=float, help="Mutation probability")
+parser.add_argument("--cxp", default=0, type=float, help="Crossover probability")
+parser.add_argument("--mp", default=1, type=float, help="Mutation probability")
 parser.add_argument(
     "--mutation",
     default="function-tools.mutUniformInt#low-0#up-40000#indpb-0.1",
@@ -110,7 +109,6 @@ parser.add_argument(
     type=float,
     help="Upper bound for the random initialization of the leaves",
 )  # Not used in oblique
-
 parser.add_argument(
     "--decay",
     default=0.99,
@@ -118,14 +116,9 @@ parser.add_argument(
     help="The decay factor for the epsilon decay (eps_t = eps_0 * decay^t)",
 )  # Not used in orthogonal
 parser.add_argument(
-    "--timeout",
-    default=600,
-    type=int,
-    help="Maximum evaluation time, useful to continue the evolution in case of MemoryErrors",
-)  # Not used in orthogonal
-parser.add_argument(
     "--with_bias",
-    action="store_true",
+    default=True,
+    type=bool,
     help="if used, then the the condition will be (sum ...) < <const>, otherwise (sum ...) < 0",
 )  # Not used in orthogonal
 parser.add_argument(
@@ -145,6 +138,12 @@ parser.add_argument(
     default=None,
     type=str,
     help="This string must contain the range of constants for each variable in the format '#min_0,max_0,step_0,divisor_0;...;min_n,max_n,step_n,divisor_n'. All the numbers must be integers.",
+)
+parser.add_argument(
+    "--randInit",
+    default=True,
+    type=bool,
+    help="The initialization strategy for q-values, True=random",
 )
 
 # Setup of the logging
@@ -168,11 +167,11 @@ lr = "auto" if args.learning_rate == "auto" else float(args.learning_rate)
 class CLeaf(Leaf):
     def __init__(self):
         super(CLeaf, self).__init__(
-            args.n_actions,
-            lr,
-            args.df,
-            args.eps,
-            randInit=True,
+            n_actions=args.n_actions,
+            learning_rate=lr,
+            discount_factor=args.df,
+            epsilon=args.eps,
+            randInit=args.randInit,
             low=args.low,
             up=args.up,
         )
@@ -191,6 +190,7 @@ class EpsilonDecayLeaf(Leaf):
             learning_rate=lr,
             discount_factor=args.df,
             epsilon=args.eps,
+            randInit=args.randInit,
             low=args.low,
             up=args.up,
         )
@@ -237,14 +237,20 @@ for index, type_ in enumerate(types.split(";")):
         consts[index] = (consts_[0], consts_[-1])
 
 if args.grammar == "oblique":
-    oblique_split = "+".join(
-        [
-            "<const> * (_in_{0} - {1})/({2} - {1})".format(
-                i, consts[i][0], consts[i][1]
-            )
-            for i in range(input_space_size)
-        ]
-    )
+    if args.environment_name == "MountainCar-v0":
+        oblique_split = "+".join(
+            [
+                # normalization
+                "<const> * (_in_{0} - {1})/({2} - {1})".format(
+                    i, consts[i][0], consts[i][1]
+                )
+                for i in range(input_space_size)
+            ]
+        )
+    else:
+        oblique_split = "+".join(
+            ["<const> * _in_{0}".format(i) for i in range(input_space_size)]
+        )
 
     OBLIQUE_GRAMMAR = {
         "bt": ["<if>"],
@@ -254,7 +260,7 @@ if args.grammar == "oblique":
         "const": [
             str(k / 1000)
             for k in range(
-                -args.constant_range, args.constant_range + 1, args.constant_step
+                -args.constant_range, args.constant_range, args.constant_step
             )
         ],
     }
@@ -295,10 +301,9 @@ def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
     """
     phenotype, _ = GETranslator(grammar).genotype_to_str(genotype)
     bt = DecisionTree(phenotype, leaf)
-    return fitness_function(bt, episodes, timeout=args.timeout)
+    return fitness_function(bt, episodes)
 
 
-@stopit.threading_timeoutable(default=((-1000,), None))
 def fitness(tree, episodes=args.episodes):
     """
     Calculates the fitness of a given DecisionTree on an environment.
@@ -322,7 +327,6 @@ def fitness(tree, episodes=args.episodes):
             action = 0
 
             for t in range(args.episode_len):
-                # obs = list(obs.flatten())
                 action = tree.get_action(obs)
 
                 obs, rew, done, _ = env.step(action)
@@ -395,7 +399,7 @@ if __name__ == "__main__":
         log_.write("best_fitness: {}".format(hof[0].fitness.values[0]))
 
     # Plotting result
-    plt.title(args.environment_name)
+    plt.title(args.environment_name + " - " + args.grammar)
     plt.xlabel("generations")
     plt.ylabel("fitness score")
     plt.xlim(-2, args.generations + 2)
@@ -407,7 +411,12 @@ if __name__ == "__main__":
         minpoints.append(log[i]["min"])
         avgpoints.append(log[i]["avg"])
         stdpoints.append(log[i]["std"])
-    plt.ylim(-10, max(maxpoints) + 10)
+    if args.environment_name == "CartPole-v1":
+        plt.ylim(-10, max(maxpoints) + 10)
+    elif args.environment_name == "MountainCar-v0":
+        plt.ylim(-210, 10)
+    elif args.environment_name == "LunarLander-v2":
+        plt.ylim(-10, max(maxpoints) + 10)
     plt.plot(xpoints, maxpoints, label="max", color="#2ca02c")
     plt.plot(xpoints, minpoints, label="min", color="#ff7f0e")
     plt.plot(xpoints, avgpoints, label="avg", color="#1f77b4")

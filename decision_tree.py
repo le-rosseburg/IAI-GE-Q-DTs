@@ -128,9 +128,9 @@ class Leaf:
         learning_rate=0.001,
         discount_factor=0.05,
         epsilon=0.05,
-        randInit=False,
-        low=-100,
-        up=100,
+        randInit=True,
+        low=-1,
+        up=1,
     ):
         """
         Initializes a new instance of the class Leaf.

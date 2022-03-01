@@ -89,8 +89,5 @@ class GETranslator:
                 while len(line) > 0 and line[-1] == "}":
                     n_tabs -= 1
                     line = line[:-1]
-                # Not sure if needed
-                # if n_tabs >= 100:
-                #    return "None"
         fixed_phenotype = "\n".join(fixed_lines)
         return fixed_phenotype

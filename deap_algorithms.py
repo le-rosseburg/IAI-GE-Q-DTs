@@ -10,11 +10,11 @@ import datetime
 def varAnd(population, toolbox, cxpb, mutpb):
     """
     This algorithm represents the varAnd algorithm from the deap.tools library
-    modified as described in the paper [CustodeIacca2020]. The allocation of the parents
+    modified as described in the paper [CustodeIacca2021]. The allocation of the parents
     was changed.
 
-    [CustodeIacca2020] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
-    of interpretable decision trees', 2020
+    [CustodeIacca2021] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
+    of interpretable decision trees', 2021
     ---------------------------------------
 
     Part of an evolutionary algorithm applying only the variation part
@@ -87,11 +87,11 @@ def eaSimple(
 ):
     """
     This algorithm represents the eaSimple algorithm from the deap.tools library
-    modified as described in the paper [CustodeIacca2020]. A different replacment startegy
+    modified as described in the paper [CustodeIacca2021]. A different replacment startegy
     and additional logbook entries were implemented.
 
-    [CustodeIacca2020] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
-    of interpretable decision trees', 2020
+    [CustodeIacca2021] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
+    of interpretable decision trees', 2021
     ---------------------------------------
 
     This algorithm reproduce the simplest evolutionary algorithm as
