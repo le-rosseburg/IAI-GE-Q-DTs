@@ -1,7 +1,4 @@
-scoop==0.7.1.1
-multiprocess==0.70.10
 stopit==1.1.2
 gym==0.21.0
-joblib==0.17.0
 numpy==1.22.1
 matplotlib==3.5.1

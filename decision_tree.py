@@ -74,7 +74,7 @@ class DecisionTree:
         current_leaf = self.leaves[variables["leaf"]]
         current_q_value = max(current_leaf.q)
         if self.last_leaf is not None:
-            # apply q-leraning update to current leaf
+            # apply q-learning update to current leaf
             self.last_leaf.update(self.current_reward, current_q_value)
 
         # update last used leaf
@@ -184,14 +184,8 @@ class Leaf:
 
         """
         if self.last_action is not None:
-            # still don't know why they check if self-learning_rate is callable
-            self.learning_rate = (
-                self.learning_rate
-                if not callable(self.learning_rate)
-                else self.learning_rate(self.iteration[self.last_action])
-            )
             """
-            # Special szenario, used for LunarLander environment:
+            Special szenario, used for LunarLander environment:
             "The learning rate has been set to 1/k, where k is the number of visits to the [last] state-action pair."
             "This guarantees that the state-action function converges to the optimum with k → ∞"
             """

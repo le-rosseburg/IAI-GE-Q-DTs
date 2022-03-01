@@ -3,7 +3,7 @@ Implementation of the grammatical evolution
 
 """
 import numpy as np
-from deap import base, creator, tools, algorithms
+from deap import base, creator, tools
 from deap_algorithms import eaSimple
 
 
@@ -11,7 +11,6 @@ def grammatical_evolution(
     fitness_function,
     n_individuals=200,
     n_generations=100,
-    jobs=1,
     cxpb=0,
     mutpb=1,
     genotype_len=1024,
@@ -28,7 +27,6 @@ def grammatical_evolution(
     :param (function) fitness_function: The fitness function for the evolutionary algorithm
     :param (int) n_individuals: Number of individuals inside a population
     :param (int) n_generations: Number of generations used for the evolutionary algorithm
-    :param (int) jobs: Number oj jobs used when multiprocessing is activated
     :param (float) cxpb: The crossover probability
     :param (float) mutpb: The mutation probability
     :param (int) genotype_len: The fixed length of a genotyp
@@ -107,44 +105,3 @@ def grammatical_evolution(
     )
 
     return pop, log, hof, best_leaves
-
-
-# die funktionen werden überhaupt nicht benutzt.
-# Es wird auf die default funktionen zugegriffen die beim parser angegeben sind
-# das sind:
-# mutation: tools.mutUniformInt#low-0#up-40000#indpb-0.1
-# crossover: tools.cxOnePoint
-# selection: tools.selTournament#tournsize-2
-
-"""# mutation
-def mutate(ind, attribute):
-    return tools.mutUniformInt(ind, 0, 40000, 0.1)
-
-    rand = np.random.randint(0, len(ind) - 1)
-    assert rand >= 0
-
-    if np.random.uniform() < 0.5:
-        # randomly mutate one gene
-        ind[rand] = attribute_generator()
-    else:
-        # makes no sense as genotypes should be of fixed lengths according to paper
-        # duplicates a random amount of genes
-        ind.extend(np.random.choice(ind, size=rand))
-    return (ind,)
-
-
-# crossover, only used inside the oblique tests
-def mate(ind1):
-    offspring = tools.cxOnePoint(ind1, ind2)
-
-    # makes no sense
-    if np.random.uniform() < 0.5:
-        new_offspring = []
-        for idx, ind in enumerate([ind1, ind2]):
-            _, used = GETranslator(1, [object], [0]).genotype_to_str(ind)
-            if used > len(ind):
-                used = len(ind)
-            # generates a new genotype with the length min(length(ind1), length(ind2))
-            new_offspring.append(individual(offspring[idx][:used]))
-        offspring = (new_offspring[0], new_offspring[1])
-    return offspring"""
