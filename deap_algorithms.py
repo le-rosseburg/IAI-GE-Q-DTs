@@ -87,8 +87,10 @@ def eaSimple(
 ):
     """
     This algorithm represents the eaSimple algorithm from the deap.tools library
-    modified as described in the paper [CustodeIacca2021]. A different replacment startegy
+    modified as described in the paper [CustodeIacca2021]. A different replacement strategy
     and additional logbook entries were implemented.
+
+    :returns (list) best_leaves: The leaves of the best individual.
 
     [CustodeIacca2021] Leonardo Lucio Custode, Giovanni Iacca, 'Evolutionary learning
     of interpretable decision trees', 2021
@@ -221,10 +223,11 @@ def eaSimple(
 
         # Replace the current population by the offspring
         for o in offspring:
+            # select worst parent of the offspring
             argmin = np.argmin(
                 map(lambda x: population[x].fitness.values[0], o.parents)
             )
-
+            # Replace parent with offspring if the fitness of the offspring is better
             if o.fitness.values[0] > population[o.parents[argmin]].fitness.values[0]:
                 population[o.parents[argmin]] = o
 
