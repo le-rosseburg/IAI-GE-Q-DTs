@@ -31,6 +31,11 @@ python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --s
 ##### Oblique
 python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 42 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 
+## Random seeds
+- Nr. 1: 42
+- Nr. 2: 16
+- Nr. 3: 68
+
 ---
 
 ## Links
