@@ -426,7 +426,8 @@ if __name__ == "__main__":
         log_.write("\n" + "Fitness history:\n" + str(log) + "\n")
         log_.write("\n" + "HOF-Individual:\n" + str(hof[0]) + "\n")
         log_.write("\n" + "Phenotype:\n" + phenotype + "\n")
-        log_.write("best_fitness: {}".format(hof[0].fitness.values[0]))
+        log_.write("best_fitness: {}".format(hof[0].fitness.values[0]) + "\n")
+        log_.write("[{}]".format(datetime.datetime.now()))
 
     # Plot the result
     plt.title(args.environment_name + " - " + args.grammar)
