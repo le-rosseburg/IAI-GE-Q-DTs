@@ -4,12 +4,19 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 ---
 
 ## Installation guide
-- pip install git+https://github.com/maotto/deap@master
 
-for LunarLander-v2:
-- conda install swig
-- pip install gym[Box2D]
-
+1. Install the open-source-distribution [anaconda](https://www.anaconda.com/products/individual).
+2. Use python 3.9.2. We recommend working inside a conda environment.
+  ```
+  conda create -n RL-project python=3.9.2
+  conda activate RL-project
+  ```
+3. Install requirements with `pip install -r requirements.txt`.
+4. To use LunarLander-v2 execute the following commands:
+  ```
+  conda install swig
+  pip install gym[Box2D]
+  ```
 ---
 
 ## Commands
@@ -32,9 +39,9 @@ python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --s
 python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 42 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 
 ## Random seeds
-- Nr. 1: 42
-- Nr. 2: 16
-- Nr. 3: 68
+- Nr. 1: 7
+- Nr. 2: 9
+- Nr. 3: 2
 
 ---
 
