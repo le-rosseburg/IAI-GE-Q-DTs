@@ -4,12 +4,19 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 ---
 
 ## Installation guide
-- pip install git+https://github.com/maotto/deap@master
 
-for LunarLander-v2:
-- conda install swig
-- pip install gym[Box2D]
-
+1. Install the open-source-distribution [anaconda](https://www.anaconda.com/products/individual).
+2. Use python 3.9.2. We recommend working inside a conda environment.
+  ```
+  conda create -n RL-project python=3.9.2
+  conda activate RL-project
+  ```
+3. Install requirements with `pip install -r requirements.txt`.
+4. To use LunarLander-v2 execute the following commands:
+  ```
+  conda install swig
+  pip install gym[Box2D]
+  ```
 ---
 
 ## Commands
