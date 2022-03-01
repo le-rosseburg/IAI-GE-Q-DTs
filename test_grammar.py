@@ -5,15 +5,12 @@ import datetime
 import argparse
 import numpy as np
 import stopit
-from time import time, sleep
 from numpy import random
 from matplotlib import pyplot as plt
-from multiprocessing import TimeoutError
 
 from decision_tree import DecisionTree, Leaf
 from grammatical_evolution import grammatical_evolution
 from ge_translator import GETranslator
-from joblib import parallel_backend
 
 
 def string_to_dict(string):
@@ -44,9 +41,6 @@ def string_to_dict(string):
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--grammar", default="orthogonal", type=str, help="The grammar that will be used"
-)
-parser.add_argument(
-    "--jobs", default=1, type=int, help="The number of jobs to use for the evolution"
 )
 parser.add_argument("--seed", default=0, type=int, help="Random seed")
 parser.add_argument(
@@ -102,19 +96,6 @@ parser.add_argument(
     help="Mutation operator. String in the format function-value#function_param_-value_1... The operators from the DEAP library can be used by setting the function to 'function-tools.<operator_name>'. Default: Uniform Int Mutation",
 )
 parser.add_argument(
-    "--crossover",
-    default="function-tools.cxOnePoint",
-    type=string_to_dict,
-    help="Crossover operator, see Mutation operator. Default: One point",
-)
-parser.add_argument(
-    "--selection",
-    default="function-tools.selTournament#tournsize-2",
-    type=string_to_dict,
-    help="Selection operator, see Mutation operator. Default: tournament of size 2",
-)
-
-parser.add_argument(
     "--genotype_len", default=1024, type=int, help="Length of the fixed-length genotype"
 )  # default for oblique 100
 parser.add_argument(
@@ -122,31 +103,31 @@ parser.add_argument(
     default=-1,
     type=float,
     help="Lower bound for the random initialization of the leaves",
-)  # Not used in oblique in original
+)  # Not used in oblique
 parser.add_argument(
     "--up",
     default=1,
     type=float,
     help="Upper bound for the random initialization of the leaves",
-)  # Not used in oblique in original
+)  # Not used in oblique
 
 parser.add_argument(
     "--decay",
     default=0.99,
     type=float,
     help="The decay factor for the epsilon decay (eps_t = eps_0 * decay^t)",
-)  # Not used in orthogonal  in original
+)  # Not used in orthogonal
 parser.add_argument(
     "--timeout",
     default=600,
     type=int,
     help="Maximum evaluation time, useful to continue the evolution in case of MemoryErrors",
-)  # Not used in orthogonal in original
+)  # Not used in orthogonal
 parser.add_argument(
     "--with_bias",
     action="store_true",
     help="if used, then the the condition will be (sum ...) < <const>, otherwise (sum ...) < 0",
-)  # Not used in orthogonal in original
+)  # Not used in orthogonal
 parser.add_argument(
     "--constant_range",
     default=1000,
@@ -180,11 +161,10 @@ os.makedirs(logdir)
 
 args = parser.parse_args()
 
-best = None
 input_space_size = args.input_space
 lr = "auto" if args.learning_rate == "auto" else float(args.learning_rate)
 
-# Creation of an ad-hoc Leaf class
+
 class CLeaf(Leaf):
     def __init__(self):
         super(CLeaf, self).__init__(
@@ -198,7 +178,6 @@ class CLeaf(Leaf):
         )
 
 
-# Creation of the EpsilonDecay Leaf
 class EpsilonDecayLeaf(Leaf):
     """A eps-greedy leaf with epsilon decay."""
 
@@ -212,7 +191,6 @@ class EpsilonDecayLeaf(Leaf):
             learning_rate=lr,
             discount_factor=args.df,
             epsilon=args.eps,
-            randInit=True,
             low=args.low,
             up=args.up,
         )
@@ -348,14 +326,11 @@ def fitness(tree, episodes=args.episodes):
                 action = tree.get_action(obs)
 
                 obs, rew, done, _ = env.step(action)
-                # env.render()
                 tree.set_reward(rew)
                 cumulated_reward += rew
 
                 if done:
                     break
-
-            # tree.set_reward(rew)
 
             tree.get_action(obs)
             global_cumulative_rewards.append(cumulated_reward)
@@ -382,21 +357,17 @@ if __name__ == "__main__":
         def fit_fcn(tree):
             return evaluate_fitness(fitness, EpsilonDecayLeaf, tree)
 
-    with parallel_backend("multiprocessing"):
-        pop, log, hof, best_leaves = grammatical_evolution(
-            fitness_function=fit_fcn,
-            n_individuals=args.population_size,
-            n_generations=args.generations,
-            jobs=args.jobs,
-            cxpb=args.cxp,
-            mutpb=args.mp,
-            genotype_len=args.genotype_len,
-            selection=args.selection,
-            mutation=args.mutation,
-            crossover=args.crossover,
-            seed=args.seed,
-            logfile=logfile,
-        )  # timeout missing
+    pop, log, hof, best_leaves = grammatical_evolution(
+        fitness_function=fit_fcn,
+        n_individuals=args.population_size,
+        n_generations=args.generations,
+        cxpb=args.cxp,
+        mutpb=args.mp,
+        genotype_len=args.genotype_len,
+        mutation=args.mutation,
+        seed=args.seed,
+        logfile=logfile,
+    )
 
     # Log fitness inside .tsv-file
     with open(fitfile, "a") as fit_:
@@ -404,9 +375,7 @@ if __name__ == "__main__":
 
     # Log best individual
     with open(logfile, "a") as log_:
-        phenotype, _ = GETranslator(grammar).genotype_to_str(
-            hof[0]
-        )  ### Change to used grammar
+        phenotype, _ = GETranslator(grammar).genotype_to_str(hof[0])
         phenotype = phenotype.replace('leaf="_leaf"', "")
 
         # Iterate over all possible leaves
@@ -431,10 +400,7 @@ if __name__ == "__main__":
     plt.ylabel("fitness score")
     plt.xlim(-2, args.generations + 2)
     xpoints = []
-    minpoints = []
-    maxpoints = []
-    avgpoints = []
-    stdpoints = []
+    minpoints, maxpoints, avgpoints, stdpoints = [], [], [], []
     for i in range(0, len(log)):
         xpoints.append(log[i]["gen"])
         maxpoints.append(log[i]["max"])
@@ -446,8 +412,7 @@ if __name__ == "__main__":
     plt.plot(xpoints, minpoints, label="min", color="#ff7f0e")
     plt.plot(xpoints, avgpoints, label="avg", color="#1f77b4")
     # add errorbars
-    stdtop = []
-    stdbottom = []
+    stdtop, stdbottom = [], []
     for i in range(0, len(log)):
         stdtop.append(avgpoints[i] + stdpoints[i] / 2)
         stdbottom.append(avgpoints[i] - stdpoints[i] / 2)
