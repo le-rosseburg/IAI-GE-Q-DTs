@@ -446,7 +446,7 @@ if __name__ == "__main__":
     if args.environment_name == "CartPole-v1":
         plt.ylim(-10, max(maxpoints) + 10)
     elif args.environment_name == "MountainCar-v0":
-        plt.ylim(-210, 10)
+        plt.ylim(-202, -98)
     elif args.environment_name == "LunarLander-v2":
         plt.ylim(-10, max(maxpoints) + 10)
     plt.plot(xpoints, maxpoints, label="max", color="#2ca02c")
