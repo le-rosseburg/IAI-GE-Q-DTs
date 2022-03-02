@@ -1,0 +1,6 @@
+Environment: MountainCar-v0; Grammar: oblique; Seed: 7; Number of runs: 1000;
+Mean = -101.14 
+Std = 8.84976835855041
+Start time: 2022-03-02 23:39:14.482751
+End time: 2022-03-02 23:39:22.835636
+

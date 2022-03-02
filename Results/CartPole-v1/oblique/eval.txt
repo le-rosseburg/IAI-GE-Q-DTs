@@ -1,0 +1,6 @@
+Environment: CartPole-v1; Grammar: oblique; Seed: 62; Number of runs: 1000;
+Mean = 256.626 
+Std = 24.263720324797678
+Start time: 2022-03-02 23:37:40.519045
+End time: 2022-03-02 23:37:55.594327
+
