@@ -162,9 +162,6 @@ Hyperparameters were derived from the original paper to examine reproducibility.
   -   [Guide](https://www.analyticsvidhya.com/blog/2021/11/implementing-a-particle-swarm-optimization-with-python/)
   -   [PSO from scratch](https://medium.com/analytics-vidhya/implementing-particle-swarm-optimization-pso-algorithm-in-python-9efc2eb179a6)
 
-## Project Guidlines: 
+## Project Guidelines: 
 - [Reproducibility Checklist](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=a2067dd448cbae4be0ebaabc1809dd1b&file_name=Reproducibility.pdf)
-- [PEP8 code documentation](https://www.python.org/dev/peps/pep-0008/)
-- [Lecture powerpoint](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=f59cece59252733b699685dd73438268&file_name=RL_lecture_exam_21_22.pdf)
-- [DRL that Matters Paper](https://arxiv.org/abs/1709.06560)
-- [DRL that Matters Whitboard](https://miro.com/app/board/uXjVOasqpog=/)
+- [Lecture Powerpoint](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=f59cece59252733b699685dd73438268&file_name=RL_lecture_exam_21_22.pdf)
