@@ -69,9 +69,9 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - `python test_evolution.py --grammar orthogonal --environment_name CartPole-v1 --seed 2 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 100 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
 
 > **Specs used in training:**
-> CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
-> RAM = 8,0 GB DDR3
-> OS = Windows 10
+> CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
+> RAM = 8,0 GB DDR3 \
+> OS = Windows 10 \
 > Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
 
 ##### Oblique
@@ -82,9 +82,9 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 7 --n_actions 4 --learning_rate 0.001 --df 0.9 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
 
 > **Specs used in training:**
-> CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
-> RAM = 8,0 GB DDR3
-> OS = Windows 10
+> CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
+> RAM = 8,0 GB DDR3 \
+> OS = Windows 10 \
 > Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
 
 ### MountainCar-v0
@@ -96,9 +96,9 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - `python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
 
 > **Specs used in training:**
-> CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
-> RAM = 8,0 GB DDR3 (1600MHz)
-> OS = Windows 10
+> CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
+> RAM = 8,0 GB DDR3 (1600MHz) \
+> OS = Windows 10 \
 > Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
 
 ##### Oblique
@@ -109,9 +109,9 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 500 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
 
 > **Specs used in training:**
-> CPU = AMD Ryzen 5 5600x
-> RAM = 32GB DDR4 (3600MHz)
-> OS = Windows 10
+> CPU = AMD Ryzen 5 5600x \
+> RAM = 32GB DDR4 (3600MHz) \
+> OS = Windows 10 \
 > Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
 
 ### LunarLander-v2
@@ -123,9 +123,9 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - `python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 9 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
 
 > **Specs used in training:**
-> CPU = AMD Ryzen 5 5600x
-> RAM = 32GB DDR4 (3600MHz)
-> OS = Windows 10
+> CPU = AMD Ryzen 5 5600x \
+> RAM = 32GB DDR4 (3600MHz) \
+> OS = Windows 10 \
 > Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
 
 ---
@@ -135,10 +135,10 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 ### Results 
 > **Setting:** 1000 runs, each on a different seed
 >
-> **CartPole-v1 - orthogonal:** Mean = 491.758 ; Std = 20.267102308914314
-> **CartPole-v1 - oblique:** Mean = 256.626  ; Std = 24.263720324797678
-> **MountainCar-v0 - orthogonal:** Mean = -99.305 , Std = 7.708305585535644
-> **MountainCar-v0 - oblique:** Mean = -101.14 ; Std = 8.84976835855041 
+> **CartPole-v1 - orthogonal:** Mean = 491.758 ; Std = 20.267102308914314 \
+> **CartPole-v1 - oblique:** Mean = 256.626  ; Std = 24.263720324797678 \
+> **MountainCar-v0 - orthogonal:** Mean = -99.305 , Std = 7.708305585535644 \
+> **MountainCar-v0 - oblique:** Mean = -101.14 ; Std = 8.84976835855041 \
 > **LunarLandert-v2 - oblique:** Mean =  ; Std = 
 
 ### Commands
