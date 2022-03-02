@@ -433,7 +433,6 @@ if __name__ == "__main__":
     plt.title(args.environment_name + " - " + args.grammar)
     plt.xlabel("generations")
     plt.ylabel("fitness score")
-    plt.xlim(-2, args.generations + 2)
     xpoints = []
     minpoints, maxpoints, avgpoints, stdpoints = [], [], [], []
     for i in range(0, len(log)):
@@ -444,11 +443,17 @@ if __name__ == "__main__":
         stdpoints.append(log[i]["std"])
     # Define environment specific axis limits
     if args.environment_name == "CartPole-v1":
+        plt.xlim(-2, 102)
         plt.ylim(-10, max(maxpoints) + 10)
+        plt.hlines(y=475, xmin=-2, xmax=102, color="red", linestyles="dashed")
     elif args.environment_name == "MountainCar-v0":
+        plt.xlim(-10, 1010)
         plt.ylim(-202, -98)
+        plt.hlines(y=-110, xmin=-10, xmax=1010, color="red", linestyles="dashed")
     elif args.environment_name == "LunarLander-v2":
+        plt.xlim(-2, 102)
         plt.ylim(-10, max(maxpoints) + 10)
+        plt.hlines(y=200, xmin=-2, xmax=102, color="red", linestyles="dashed")
     plt.plot(xpoints, maxpoints, label="max", color="#2ca02c")
     plt.plot(xpoints, minpoints, label="min", color="#ff7f0e")
     plt.plot(xpoints, avgpoints, label="avg", color="#1f77b4")
