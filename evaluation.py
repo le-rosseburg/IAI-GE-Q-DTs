@@ -8,6 +8,7 @@ import datetime
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--grammar", default="orthogonal", type=str, help="The grammar that will be used"
@@ -136,7 +137,7 @@ def evaluate(program, environment, grammar, seed):
 if __name__ == "__main__":
 
     scores = [
-        evaluate(program, args.environment, args.grammar, s)
-        for s in range(args.seed, args.seed + args.n_runs)
+        evaluate(program, args.environment, args.grammar, seed)
+        for seed in range(args.seed, args.seed + args.n_runs)
     ]
     print("Mean: {}; Std: {}".format(np.mean(scores), np.std(scores)))
