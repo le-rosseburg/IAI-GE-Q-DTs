@@ -443,15 +443,15 @@ if __name__ == "__main__":
         stdpoints.append(log[i]["std"])
     # Define environment specific axis limits
     if args.environment_name == "CartPole-v1":
-        plt.xlim(-2, 102)
+        plt.xlim(-2, args.generations + 2)
         plt.ylim(-10, max(maxpoints) + 10)
         plt.hlines(y=475, xmin=-2, xmax=102, color="red", linestyles="dashed")
     elif args.environment_name == "MountainCar-v0":
-        plt.xlim(-10, 1010)
+        plt.xlim(-10, args.generations + 10)
         plt.ylim(-202, -98)
         plt.hlines(y=-110, xmin=-10, xmax=1010, color="red", linestyles="dashed")
     elif args.environment_name == "LunarLander-v2":
-        plt.xlim(-2, 102)
+        plt.xlim(-2, args.generations + 2)
         plt.ylim(-10, max(maxpoints) + 10)
         plt.hlines(y=200, xmin=-2, xmax=102, color="red", linestyles="dashed")
     plt.plot(xpoints, maxpoints, label="max", color="#2ca02c")
