@@ -1,0 +1,6 @@
+Environment: LunarLander-v2; Grammar: oblique; Seed: 5; Number of runs: 1000;
+Mean = 249.18271913727554 
+Std = 26.977546731623335
+Start time: 2022-03-03 19:45:50.592353
+End time: 2022-03-03 19:49:53.646544
+
