@@ -3,7 +3,7 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 
 ---
 
-## Installation guide:
+## Installation guide
 
 1. Install the open-source-distribution [anaconda](https://www.anaconda.com/products/individual).
 2. Use python 3.9.2. We recommend working inside a conda environment.
@@ -19,22 +19,63 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
     ```
 5. Execute training or evaluation command(s) of your choice.
 
-## Software Versions:
+## Software Versions
 - python==3.9.2
 - gym==0.21.0
 - numpy==1.22.1
 - matplotlib==3.5.1
 - deap==1.3.1
 
-## Used Techniques:
+## Used Techniques
 Evolutionary algorithm (Grammatical Evolution) with Q-learning.
 
-## Hyperparameter decisions:
+## Hyperparameter decisions
 Hyperparameters were derived from the original paper to examine reproducibility.
 
 ---
 
-## Argument explanations:
+## Environments
+### CartPole-v1
+##### Observation Space
+- *x* ∈ [−4.8, 4.8]m : Cart position
+- *v* ∈ ]−∞, ∞[m/s   : Cart velocity
+- *θ* ∈ [−0.418, 0.418]rad : Pole angle
+- *ω* ∈ ]−∞, ∞[rad/s : Pole angular velocity
+
+##### Action space
+- 0 : Push cart to the left
+- 1 : Push cart to the right
+
+### MountainCar-v0
+##### Observation Space
+- *x* ∈ [−1.2, 0.6]m : Horizontal position of the car
+- *v* ∈ [−0.07, 0.07]m/s : Horizontal velocity of the car
+
+##### Action space
+- 0 : Accelerate to the left
+- 1 : Don't accelerate
+- 2 : Accelerate to the right
+
+### LunarLander-v2
+##### Observation Space
+- *$p_x$* : Horizontal position
+- *$p_v$* : Vertical position
+- *$v_x$* : Horizontal velocity
+- *$v_y$* : Vertical velocity
+- *θ* : Angle w.r.t. the vertical axis
+- *ω* : Angular velocity
+- *$c_l$* : Left leg contact
+- *$c_r$* : right leg contact
+
+##### Action space
+- 0 : Do nothing
+- 1 : Fire left orientation engine
+- 2 : Fire main engine
+- 3 : Fire right orientation engine
+
+---
+
+## Argument explanations
 - **--grammar:** The grammar that will be used
 - **--environment_name:** The name of the environment in the OpenAI Gym framework
 - **--n_actions:** The number of action that the agent can perform in the environment
@@ -60,7 +101,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 ---
 
 ## Training
-### Results:
+### Results
 #### CartPole-v1
 ##### Orthogonal
 ![CartPole-v1 - orthogonal](Results/CartPole-v1/orthogonal/seed_7/fitness.jpg)
@@ -85,7 +126,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 ![LunarLander-v2 - oblique - HOF decision tree](Results/LunarLander-v2/oblique/LunarLander-v2_oblique_hof_dt.jpg)
 
 
-### Commands:
+### Commands
 #### CartPole-v1
 ##### Orthogonal
 - `python test_evolution.py --grammar orthogonal --environment_name CartPole-v1 --seed 7 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 100 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
@@ -156,8 +197,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 
 ---
 
-## Evaluation:
-
+## Evaluation
 ### Results 
 > **Setting:** 1000 runs, each on a different seed
 >
@@ -165,7 +205,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > **CartPole-v1 - oblique:** Mean = 256.626  ; Std = 24.263720324797678 \
 > **MountainCar-v0 - orthogonal:** Mean = -99.305 , Std = 7.708305585535644 \
 > **MountainCar-v0 - oblique:** Mean = -101.14 ; Std = 8.84976835855041 \
-> **LunarLandert-v2 - oblique:** Mean =  ; Std = 
+> **LunarLandert-v2 - oblique:** Mean = 249.18271913727554 ; Std = 26.977546731623335
 
 ### Commands
 - `python evaluation.py --environment CartPole-v1 --grammar orthogonal --seed 7 --n_runs 1000`
@@ -191,11 +231,11 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - [DEAP Library](https://github.com/deap/deap)
 - [PonyGE Library](https://github.com/PonyGE/PonyGE2) and [Introduction to PonyGE](https://towardsdatascience.com/introduction-to-ponyge2-for-grammatical-evolution-d51c29f2315a)
 
-## Possible Optimizations: 
+## Possible Optimizations
 - [Particle swarm optimization](https://en.wikipedia.org/wiki/Particle_swarm_optimization):
   -   [Guide](https://www.analyticsvidhya.com/blog/2021/11/implementing-a-particle-swarm-optimization-with-python/)
   -   [PSO from scratch](https://medium.com/analytics-vidhya/implementing-particle-swarm-optimization-pso-algorithm-in-python-9efc2eb179a6)
 
-## Project Guidelines: 
+## Project Guidelines
 - [Reproducibility Checklist](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=a2067dd448cbae4be0ebaabc1809dd1b&file_name=Reproducibility.pdf)
 - [Lecture Powerpoint](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=f59cece59252733b699685dd73438268&file_name=RL_lecture_exam_21_22.pdf)
