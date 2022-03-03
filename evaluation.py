@@ -141,10 +141,7 @@ def program(input_, environment, grammar):
                                 out = 0
                             else:
                                 if input_[0] < -0.45:
-                                    if input_[0] > -0.1:
-                                        out = 2
-                                    else:
-                                        out = 2
+                                    out = 2
                                 else:
                                     if input_[1] < -0.07:
                                         out = 1
@@ -195,25 +192,11 @@ def program(input_, environment, grammar):
                                 + -0.906 * (input_[1] - -0.07) / (0.065 - -0.07)
                                 < -0.1
                             ):
-                                if (
-                                    0.023 * (input_[0] - -1.2) / (0.65 - -1.2)
-                                    + 0.749 * (input_[1] - -0.07) / (0.065 - -0.07)
-                                    < 0.015
-                                ):
-                                    out = 1
-                                else:
-                                    out = 1
+                                out = 1
                             else:
                                 out = 0
                         else:
-                            if (
-                                -0.517 * (input_[0] - -1.2) / (0.65 - -1.2)
-                                + 0.464 * (input_[1] - -0.07) / (0.065 - -0.07)
-                                < -0.054
-                            ):
-                                out = 2
-                            else:
-                                out = 2
+                            out = 2
                 else:
                     if (
                         -0.479 * (input_[0] - -1.2) / (0.65 - -1.2)
