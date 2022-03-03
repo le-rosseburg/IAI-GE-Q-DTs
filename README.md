@@ -108,7 +108,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 ![CartPole-v1 - orthogonal - HOF decision tree](Results/CartPole-v1/orthogonal/CartPole-v1_orthogonal_hof_dt.jpg)
 
 ##### Oblique
-![CartPole-v1 - oblique](Results/CartPole-v1/oblique/seed_62/fitness.jpg)
+![CartPole-v1 - oblique](Results/CartPole-v1/oblique/seed_7/fitness.jpg)
 ![CartPole-v1 - oblique - HOF decision tree](Results/CartPole-v1/oblique/CartPole-v1_oblique_hof_dt.jpg)
 
 #### MountainCar-v0
@@ -142,17 +142,17 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > Duration: 00:33:40 (seed 7) ; 00:24:11 (seed 9) ; 00:38:02 (seed 2) 
 
 ##### Oblique
-- `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 62 --n_actions 4 --learning_rate 0.001 --df 0.9 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
+- `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 9 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
 
-- `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 47 --n_actions 4 --learning_rate 0.001 --df 0.9 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
+- `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 2 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
 
-- `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 7 --n_actions 4 --learning_rate 0.001 --df 0.9 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
+- `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 7 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
 
 > **Specs used in training:** \
 > CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
 > RAM = 8,0 GB DDR3 \
 > OS = Windows 10 \
-> Duration: 00:00:55 (seed 7) ; 00:01:42 (seed 47) ; 00:01:59 (seed 62) 
+> Duration: 00:21:31 (seed 7) ; 00:12:00 (seed 9) ; 00:23:09 (seed 2) 
 
 #### MountainCar-v0
 ##### Orthogonal
@@ -202,14 +202,14 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > **Setting:** 1000 runs, each on a different seed
 >
 > **CartPole-v1 - orthogonal:** Mean = 491.758 ; Std = 20.267102308914314 \
-> **CartPole-v1 - oblique:** Mean = 256.626  ; Std = 24.263720324797678 \
+> **CartPole-v1 - oblique:** Mean = 498.066 ; Std = 12.5313065559821 \
 > **MountainCar-v0 - orthogonal:** Mean = -99.305 , Std = 7.708305585535644 \
 > **MountainCar-v0 - oblique:** Mean = -101.14 ; Std = 8.84976835855041 \
 > **LunarLander-v2 - oblique:** Mean = 249.18271913727554 ; Std = 26.977546731623335
 
 ### Commands
 - `python evaluation.py --environment CartPole-v1 --grammar orthogonal --seed 7 --n_runs 1000`
-- `python evaluation.py --environment CartPole-v1 --grammar oblique --seed 62 --n_runs 1000`
+- `python evaluation.py --environment CartPole-v1 --grammar oblique --seed 7 --n_runs 1000`
 - `python evaluation.py --environment MountainCar-v0 --grammar orthogonal --seed 7 --n_runs 1000`
 - `python evaluation.py --environment MountainCar-v0 --grammar oblique --seed 7 --n_runs 1000`
 - `python evaluation.py --environment LunarLander-v2 --grammar oblique --seed 5 --n_runs 1000`

@@ -35,89 +35,14 @@ def program(input_, environment, grammar):
                 else:
                     out = 0
         if grammar == "oblique":
-            # seed 62 result
-            if (
-                -0.012 * input_[0]
-                + -0.355 * input_[1]
-                + -0.205 * input_[2]
-                + -0.934 * input_[3]
-                < 0.072
-            ):
-                if (
-                    -0.399 * input_[0]
-                    + 0.799 * input_[1]
-                    + 0.508 * input_[2]
-                    + 0.161 * input_[3]
-                    < 0.319
-                ):
-                    out = 1
+            # seed 7 result
+            if 0.918 * input_[0]+-0.566 * input_[1]+-0.882 * input_[2]+0.625 * input_[3] < 0.707:
+                if 0.178 * input_[0]+-0.597 * input_[1]+-0.911 * input_[2]+-0.658 * input_[3] < 0.0:
+                    out=1
                 else:
-                    if (
-                        -0.821 * input_[0]
-                        + -0.862 * input_[1]
-                        + -0.687 * input_[2]
-                        + 0.037 * input_[3]
-                        < 0.839
-                    ):
-                        if (
-                            0.939 * input_[0]
-                            + 0.856 * input_[1]
-                            + -0.927 * input_[2]
-                            + -0.593 * input_[3]
-                            < -0.453
-                        ):
-                            out = 1
-                        else:
-                            if (
-                                -0.482 * input_[0]
-                                + -0.508 * input_[1]
-                                + 0.718 * input_[2]
-                                + -0.272 * input_[3]
-                                < 0.363
-                            ):
-                                if (
-                                    0.496 * input_[0]
-                                    + -0.532 * input_[1]
-                                    + 0.355 * input_[2]
-                                    + 0.069 * input_[3]
-                                    < 0.096
-                                ):
-                                    out = 1
-                                else:
-                                    out = 0
-                            else:
-                                out = 0
-                    else:
-                        out = 0
+                    out=0
             else:
-                if (
-                    0.339 * input_[0]
-                    + 0.648 * input_[1]
-                    + 0.277 * input_[2]
-                    + 0.88 * input_[3]
-                    < 0.699
-                ):
-                    out = 0
-                else:
-                    if (
-                        -0.841 * input_[0]
-                        + 0.324 * input_[1]
-                        + 0.603 * input_[2]
-                        + -0.45 * input_[3]
-                        < 0.83
-                    ):
-                        out = 0
-                    else:
-                        if (
-                            0.4 * input_[0]
-                            + -0.09 * input_[1]
-                            + -0.007 * input_[2]
-                            + -0.047 * input_[3]
-                            < -0.356
-                        ):
-                            out = 0
-                        else:
-                            out = 1
+                out=1
     elif environment == "MountainCar-v0":
         if grammar == "orthogonal":
             # seed 7 result
