@@ -102,11 +102,11 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
 
 ##### Oblique
-- `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 500 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
+- `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
 
-- `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 9 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 500 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
+- `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 9 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
 
-- `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 500 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
+- `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
 
 > **Specs used in training:**
 > CPU = AMD Ryzen 5 5600x \
