@@ -150,6 +150,14 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 
 ---
 
+## Problems
+
+
+## Future Work
+
+
+---
+
 ## Links
 - [Paper](https://arxiv.org/pdf/2012.07723.pdf)
 - [Codebase of paper](https://gitlab.com/leocus/ge_q_dts)
