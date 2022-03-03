@@ -59,8 +59,34 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 
 ---
 
-## Training Commands:
-### CartPole-v1
+## Training
+### Results:
+#### CartPole-v1
+##### Orthogonal
+![CartPole-v1 - orthogonal](Results/CartPole-v1/orthogonal/seed_7/fitness.jpg)
+![CartPole-v1 - orthogonal - HOF decision tree](Results/CartPole-v1/orthogonal/CartPole-v1_orthogonal_hof_dt.jpg)
+
+##### Oblique
+![CartPole-v1 - oblique](Results/CartPole-v1/oblique/seed_62/fitness.jpg)
+![CartPole-v1 - oblique - HOF decision tree](Results/CartPole-v1/oblique/CartPole-v1_oblique_hof_dt.jpg)
+
+#### MountainCar-v0
+##### Orthogonal
+![MountainCar-v0 - orthogonal](Results/MountainCar-v0/orthogonal/seed_7/fitness.jpg)
+![MountainCar-v0 - orthogonal - HOF decision tree](Results/MountainCar-v0/orthogonal/MountainCar-v0_orthogonal_hof_dt.jpg)
+
+##### Oblique
+![MountainCar-v0 - oblique](Results/MountainCar-v0/oblique/seed_7/fitness.jpg)
+![MountainCar-v0 - oblique - HOF decision tree](Results/MountainCar-v0/oblique/MountainCar-v0_oblique_hof_dt.jpg)
+
+#### LunarLander-v2
+##### Oblique
+![LunarLander-v2 - oblique](Results/LunarLander-v2/oblique/seed_5/fitness.jpg)
+![LunarLander-v2 - oblique - HOF decision tree](Results/LunarLander-v2/oblique/LunarLander-v2_oblique_hof_dt.jpg)
+
+
+### Commands:
+#### CartPole-v1
 ##### Orthogonal
 - `python test_evolution.py --grammar orthogonal --environment_name CartPole-v1 --seed 7 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 100 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
 
@@ -87,7 +113,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > OS = Windows 10 \
 > Duration: 00:00:55 (seed 7) ; 00:01:42 (seed 47) ; 00:01:59 (seed 62) 
 
-### MountainCar-v0
+#### MountainCar-v0
 ##### Orthogonal
 - `python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
 
@@ -114,7 +140,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > OS = Windows 10 \
 > Duration: 10:10:26 (seed 7) ; 10:06:38 (seed 9) ; 09:30:22 (seed 2) 
 
-### LunarLander-v2
+#### LunarLander-v2
 ##### Oblique
 - `python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 5 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
 
