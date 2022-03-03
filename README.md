@@ -72,7 +72,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
 > RAM = 8,0 GB DDR3 \
 > OS = Windows 10 \
-> Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
+> Duration: 00:33:40 (seed 7) ; 00:24:11 (seed 9) ; 00:38:02 (seed 2) 
 
 ##### Oblique
 - `python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 62 --n_actions 4 --learning_rate 0.001 --df 0.9 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
@@ -85,7 +85,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
 > RAM = 8,0 GB DDR3 \
 > OS = Windows 10 \
-> Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
+> Duration: 00:00:55 (seed 7) ; 00:01:42 (seed 47) ; 00:01:59 (seed 62) 
 
 ### MountainCar-v0
 ##### Orthogonal
@@ -99,7 +99,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz \
 > RAM = 8,0 GB DDR3 (1600MHz) \
 > OS = Windows 10 \
-> Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
+> Duration: 13:50:23 (seed 7) ; 14:17:05 (seed 9) ; 14:28:24 (seed 2) 
 
 ##### Oblique
 - `python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
@@ -112,7 +112,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = AMD Ryzen 5 5600x \
 > RAM = 32GB DDR4 (3600MHz) \
 > OS = Windows 10 \
-> Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
+> Duration: 10:10:26 (seed 7) ; 10:06:38 (seed 9) ; 09:30:22 (seed 2) 
 
 ### LunarLander-v2
 ##### Oblique
@@ -126,7 +126,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = AMD Ryzen 5 5600x \
 > RAM = 32GB DDR4 (3600MHz) \
 > OS = Windows 10 \
-> Duration: ... (seed 7) ; ... (seed 9) ; ... (seed 2) 
+> Duration: ... (seed 7) ; 12:50:23 (seed 9) ; 04:42:04 (seed 2) 
 
 ---
 
