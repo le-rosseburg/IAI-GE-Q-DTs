@@ -152,7 +152,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = AMD Ryzen 5 5600x \
 > RAM = 32GB DDR4 (3600MHz) \
 > OS = Windows 10 \
-> Duration: ... (seed 7) ; 12:50:23 (seed 9) ; 04:42:04 (seed 2) 
+> Duration: 39:12:15 (seed 7) ; 12:50:23 (seed 9) ; 04:42:04 (seed 2) 
 
 ---
 
