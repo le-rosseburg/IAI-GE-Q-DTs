@@ -26,13 +26,13 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 - matplotlib==3.5.1
 - deap==1.3.1
 
+---
+
 ## Used Techniques
 Evolutionary algorithm (Grammatical Evolution) with Q-learning.
 
 ## Hyperparameter decisions
 Hyperparameters were derived from the original paper to examine reproducibility.
-
----
 
 ## Environments
 ### CartPole-v1
