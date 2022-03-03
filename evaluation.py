@@ -222,8 +222,47 @@ def program(input_, environment, grammar):
                         out = 2
     elif environment == "LunarLander-v2":
         if grammar == "oblique":
-            # seed x result
-            out = 0
+            # seed 5 result
+            if (
+                0.188 * input_[0]
+                + 0.085 * input_[1]
+                + 0.514 * input_[2]
+                + 0.893 * input_[3]
+                + -0.896 * input_[4]
+                + -0.459 * input_[5]
+                + 0.45 * input_[6]
+                + -0.102 * input_[7]
+                < -0.091
+            ):
+                if (
+                    -0.89 * input_[0]
+                    + 0.03 * input_[1]
+                    + -0.762 * input_[2]
+                    + 0.975 * input_[3]
+                    + 0.863 * input_[4]
+                    + 0.548 * input_[5]
+                    + 0.682 * input_[6]
+                    + -0.833 * input_[7]
+                    < -0.196
+                ):
+                    out = 2
+                else:
+                    out = 3
+            else:
+                if (
+                    -0.5 * input_[0]
+                    + 0.765 * input_[1]
+                    + -0.553 * input_[2]
+                    + -0.729 * input_[3]
+                    + -0.062 * input_[4]
+                    + -0.353 * input_[5]
+                    + -0.156 * input_[6]
+                    + -0.876 * input_[7]
+                    < 0.026
+                ):
+                    out = 0
+                else:
+                    out = 1
     return out
 
 
