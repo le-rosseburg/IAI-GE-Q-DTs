@@ -58,14 +58,14 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 
 ### LunarLander-v2
 ##### Observation Space
-- *$p_x$* : Horizontal position
-- *$p_v$* : Vertical position
-- *$v_x$* : Horizontal velocity
-- *$v_y$* : Vertical velocity
+- *p<sub>x</sub>* : Horizontal position
+- *p<sub>y</sub>* : Vertical position
+- *v<sub>x</sub>* : Horizontal velocity
+- *v<sub>y</sub>* : Vertical velocity
 - *θ* : Angle w.r.t. the vertical axis
 - *ω* : Angular velocity
-- *$c_l$* : Left leg contact
-- *$c_r$* : right leg contact
+- *c<sub>l</sub>* : Left leg contact
+- *c<sub>r</sub>* : right leg contact
 
 ##### Action space
 - 0 : Do nothing
