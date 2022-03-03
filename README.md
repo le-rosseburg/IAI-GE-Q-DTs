@@ -193,7 +193,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > CPU = AMD Ryzen 5 5600x \
 > RAM = 32GB DDR4 (3600MHz) \
 > OS = Windows 10 \
-> Duration: 39:12:15 (seed 7) ; 12:50:23 (seed 9) ; 04:42:04 (seed 2) 
+> Duration: 39:12:15 (seed 5) ; 12:50:23 (seed 9) ; 04:42:04 (seed 2) 
 
 ---
 
@@ -205,7 +205,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 > **CartPole-v1 - oblique:** Mean = 256.626  ; Std = 24.263720324797678 \
 > **MountainCar-v0 - orthogonal:** Mean = -99.305 , Std = 7.708305585535644 \
 > **MountainCar-v0 - oblique:** Mean = -101.14 ; Std = 8.84976835855041 \
-> **LunarLandert-v2 - oblique:** Mean = 249.18271913727554 ; Std = 26.977546731623335
+> **LunarLander-v2 - oblique:** Mean = 249.18271913727554 ; Std = 26.977546731623335
 
 ### Commands
 - `python evaluation.py --environment CartPole-v1 --grammar orthogonal --seed 7 --n_runs 1000`
