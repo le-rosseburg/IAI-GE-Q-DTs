@@ -253,5 +253,5 @@ python evaluation.py --environment LunarLander-v2 --grammar oblique --seed 5 --n
 - [DEAP Library](https://github.com/deap/deap)
 
 ## Project Guidelines
-- [Reproducibility Checklist](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=a2067dd448cbae4be0ebaabc1809dd1b&file_name=Reproducibility.pdf)
+- [Reproducibility Checklist](checklist_reproducibility.jpg)
 - [Lecture Powerpoint](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=f59cece59252733b699685dd73438268&file_name=RL_lecture_exam_21_22.pdf)
