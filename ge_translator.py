@@ -4,7 +4,7 @@ Implementation of the grammatical evolution translator which translates a genoty
 """
 
 import re
-
+import deap
 
 class GETranslator:
     def __init__(self, grammar):
@@ -13,6 +13,7 @@ class GETranslator:
 
         :param (dict) grammar: A dictionary containing the rules of the grammar and their production
         """
+        assert type(grammar) == dict,"'grammar' must be of type 'dict', got {}".format(type(grammar))
         self.operators = grammar
 
     def _calculate_phenotype_value(self, candidate, gene):
@@ -25,8 +26,13 @@ class GETranslator:
         Returns:
             (str) value: Calculated phenotype value
         """
+        assert type(candidate) == str,"'candidate' must be of type 'str', got {}".format(type(candidate))
+        assert type(gene) == int,"'gene' must be of type 'int', got {}".format(type(gene))
+
         key = candidate.replace("<", "").replace(">", "")
         value = self.operators[key][gene % len(self.operators[key])]
+
+        assert type(value) == str,"'value' must be of type 'str', got {}".format(type(value))
         return value
 
     def genotype_to_str(self, genotype):
@@ -40,6 +46,9 @@ class GETranslator:
             (str) phenotype: A string depicting the phenotype
             (int) genes_used: Number of genes that were used
         """
+        assert len(genotype) > 0
+        assert type(genotype) == deap.creator.Individual,"'genotype' must be of type 'deap.creator.Individual', got {}".format(type(genotype))
+
         string = "<dt>"
         candidates = [None]
         ctr = 0
@@ -60,6 +69,7 @@ class GETranslator:
             ctr += 1
 
         phenotype = self._fix_phenotype(string)
+        assert type(phenotype) == str,"'phenotype' must be of type 'str', got {}".format(type(phenotype))
         return phenotype, genes_used
 
     def _fix_phenotype(self, string):
@@ -71,6 +81,7 @@ class GETranslator:
         Returns:
             (str) fixed_phenotype: The fixed phenotype string
         """
+        assert type(string) == str,"'string' must be of type 'str', got {}".format(type(string))        
         if string[0] == "{":
             string = string[1:-1]
 

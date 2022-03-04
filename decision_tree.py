@@ -29,6 +29,7 @@ class DecisionTree:
         :param (str) phenotype: The phenotype representing the decision tree.
         :param (Leaf) leaf: The Leaf class used to build the decision tree.
         """
+        assert type(phenotype) == str, "'phenotype' must be of type 'str', got {}".format(type(phenotype))
         self.phenotype = phenotype
         self.current_reward = 0
         self.leaves = {}
@@ -61,6 +62,8 @@ class DecisionTree:
         Returns:
             (int) action: The index of the selected action in the current state
         """
+        assert len(observation) > 0
+
         if len(self.phenotype) == 0:
             return None
 
@@ -71,6 +74,7 @@ class DecisionTree:
         variables.update(self.leaves)
 
         # Executing phenotype with the current state variables of the environment
+        assert len(variables) == (len(self.leaves) + len(observation))
         exec(self.exec_, variables)
 
         current_leaf = self.leaves[variables["leaf"]]
@@ -90,6 +94,7 @@ class DecisionTree:
 
         :param (float) reward: A value containing the new reward of the decision tree
         """
+        assert type(reward) == float, "'reward' must be of type 'float', got {}".format(type(reward))
         self.current_reward = reward
 
     def new_episode(self):
@@ -107,6 +112,7 @@ class DecisionTree:
         returns:
             (str) phenotype: The phenotype of the decision tree
         """
+        assert type(self.phenotype) == str, "'phenotype' must be of type 'str', got {}".format(type(reward))
         return self.phenotype
 
 
@@ -152,6 +158,7 @@ class Leaf:
         self.last_action = None
         self.used_actions = [1] * n_actions
         # Check if the q-values of the leaf should be random initialized or not
+        assert type(randInit) == bool, "'randInit' must be of type 'bool', got {}.".format(type(randInit))
         if randInit:
             self.q = np.random.uniform(low, up, self.n_actions)
         else:
@@ -164,6 +171,8 @@ class Leaf:
         Returns:
             (int) action: The index of the selected action
         """
+        assert len(self.q) > 0
+
         # Apply e-greedy strategy
         if np.random.uniform() < self.epsilon:
             # Choose random action
@@ -199,6 +208,7 @@ class Leaf:
             if self.learning_rate == "auto":
                 self.learning_rate = 1 / self.used_actions[self.last_action]
             # Apply the q-learning update
+            assert type(self.learning_rate) == float, "'learning_rate' must be of type 'float', got {}.".format(type(randInit))
             self.q[self.last_action] += self.learning_rate * (
                 reward + self.discount_factor * q_next - self.q[self.last_action]
             )

@@ -57,6 +57,9 @@ def grammatical_evolution(
         (deap.tools.support.Logbook) log: The logbook returned from the evolutionary algorithm 'eaSimple'
         (dict<str, float>) best_leaves: A dictionary containing the leaves of the best individual and their q-values
     """
+    assert cxpb >= 0.0 and cxpb <= 1.0
+    assert mutpb >= 0.0 and mutpb <= 1.0
+
     np.random.seed(seed)
 
     # Define deap types and tools
@@ -121,4 +124,5 @@ def grammatical_evolution(
         logfile=logfile,
     )
 
+    assert len(hof[0]) == genotype_len
     return pop, log, hof, best_leaves

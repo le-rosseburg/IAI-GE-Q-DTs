@@ -22,6 +22,7 @@ def string_to_dict(string):
     Results:
         (dict) result: A dict of the input string
     """
+    assert type(string) == str, "'string' must be of type 'str', got {}".format(type(string))
     result = {}
     items = string.split("#")
 
@@ -150,6 +151,19 @@ os.makedirs(logdir)
 
 # Get all parser arguments
 args = parser.parse_args()
+assert args.cxp >= 0.0 and args.cxp <= 1.0
+assert args.mp >= 0.0 and args.mp <= 1.0
+assert args.decay >= 0.0 and args.decay <= 1.0
+assert args.eps >= 0.0 and args.eps <= 1.0
+assert type(args.learning_rate) == str or (args.learning_rate >= 0.0 and args.learning_rate <= 1.0)
+assert args.df >= 0.0 and args.df <= 1.0
+assert args.population_size > 0
+assert args.genotype_len > 0
+assert args.episodes > 0
+assert args.episode_len > 0
+assert args.n_actions > 0
+assert args.input_space > 0
+
 input_space_size = args.input_space
 # Check if the learning rate should be constant or dynamic given the argument
 lr = "auto" if args.learning_rate == "auto" else float(args.learning_rate)
@@ -306,6 +320,7 @@ def evaluate_fitness(fitness_function, leaf, genotype, episodes=args.episodes):
     Returns:
         (float) fitness: The fitness of the tree that was constructed
     """
+    assert callable(fitness_function)
     phenotype, _ = GETranslator(grammar).genotype_to_str(genotype)
     dt = DecisionTree(phenotype, leaf)
     return fitness_function(dt, episodes)

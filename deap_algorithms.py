@@ -51,6 +51,11 @@ def varAnd(population, toolbox, cxpb, mutpb):
     according to the given probabilities. Both probabilities should be in
     :math:`[0, 1]`.
     """
+    assert population != None
+    assert toolbox != None
+    assert cxpb >= 0.0 and cxpb <= 1.0
+    assert mutpb >= 0.0 and mutpb <= 1.0
+
     offspring = [toolbox.clone(ind) for ind in population]
     for i, o in enumerate(offspring):
         o.parents = [i]
@@ -70,6 +75,7 @@ def varAnd(population, toolbox, cxpb, mutpb):
             (offspring[i],) = toolbox.mutate(offspring[i])
             del offspring[i].fitness.values
 
+    assert len(offspring) == len(population)
     return offspring
 
 
@@ -154,6 +160,12 @@ def eaSimple(
     .. [Back2000] Back, Fogel and Michalewicz, "Evolutionary Computation 1 :
        Basic Algorithms and Operators", 2000.
     """
+    assert population != None
+    assert toolbox != None
+    assert halloffame != None
+    assert cxpb >= 0.0 and cxpb <= 1.0
+    assert mutpb >= 0.0 and mutpb <= 1.0
+
     logbook = tools.Logbook()
     logbook.header = ["gen", "nevals"] + (stats.fields if stats else [])
     best = None
@@ -192,9 +204,10 @@ def eaSimple(
 
         # Select the next generation individuals
         offspring = toolbox.select(population, len(population))
-
+        
         # Vary the pool of individuals
         offspring = var(offspring, toolbox, cxpb, mutpb)
+        
 
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]

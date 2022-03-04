@@ -16,6 +16,7 @@ parser.add_argument(
 parser.add_argument(
     "--environment",
     default="CartPole-v1",
+    type=str,
     help="The name of the environment in the OpenAI Gym framework",
 )
 parser.add_argument("--seed", default=42, type=int, help="Seed used for training")
