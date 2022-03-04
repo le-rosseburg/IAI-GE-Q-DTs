@@ -3,6 +3,8 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 
 Project members: Christian Kalfar, Lennart Rosseburg
 
+- [Reproducibility Checklist](checklist_reproducibility.jpg)
+
 ---
 
 ## Installation guide
@@ -21,7 +23,7 @@ Project members: Christian Kalfar, Lennart Rosseburg
     ```
 5. Execute training or evaluation command(s) of your choice.
 
-## Software Versions
+## Software versions
 - python==3.9.2
 - gym==0.21.0
 - numpy==1.22.1
@@ -30,7 +32,7 @@ Project members: Christian Kalfar, Lennart Rosseburg
 
 ---
 
-## Used Techniques
+## Used techniques
 Evolutionary algorithm (Grammatical Evolution) with Q-learning.
 
 ## Hyperparameter decisions
@@ -49,7 +51,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - 1 : Push cart to the right
 
 ### MountainCar-v0
-##### Observation Space
+##### Observation space
 - *x* ∈ [−1.2, 0.6]m : Horizontal position of the car
 - *v* ∈ [−0.07, 0.07]m/s : Horizontal velocity of the car
 
@@ -59,7 +61,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - 2 : Accelerate to the right
 
 ### LunarLander-v2
-##### Observation Space
+##### Observation space
 - *p<sub>x</sub>* : Horizontal position
 - *p<sub>y</sub>* : Vertical position
 - *v<sub>x</sub>* : Horizontal velocity
@@ -250,10 +252,5 @@ python evaluation.py --environment LunarLander-v2 --grammar oblique --seed 5 --n
 
 ## Links
 - [Paper](https://arxiv.org/pdf/2012.07723.pdf)
-- [Codebase of paper](https://gitlab.com/leocus/ge_q_dts)
 - [Wikilink: Grammatical evolution](https://en.wikipedia.org/wiki/Grammatical_evolution)
 - [DEAP Library](https://github.com/deap/deap)
-
-## Project Guidelines
-- [Reproducibility Checklist](checklist_reproducibility.jpg)
-- [Lecture Powerpoint](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=f59cece59252733b699685dd73438268&file_name=RL_lecture_exam_21_22.pdf)
