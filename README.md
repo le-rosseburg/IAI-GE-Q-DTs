@@ -1,6 +1,8 @@
 # IAI-GE-Q-DTs
 Reimplementation of the paper ["Evolutionary learning of interpretable decision trees"](https://arxiv.org/pdf/2012.07723v3.pdf) by Leonardo Lucio Custode, Giovanni Iacca.
 
+Project members: Chris Kalfar, Lennart Rosseburg
+
 ---
 
 ## Installation guide
