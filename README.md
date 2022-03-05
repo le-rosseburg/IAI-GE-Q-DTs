@@ -1,6 +1,10 @@
 # IAI-GE-Q-DTs
 Reimplementation of the paper ["Evolutionary learning of interpretable decision trees"](https://arxiv.org/pdf/2012.07723v3.pdf) by Leonardo Lucio Custode, Giovanni Iacca.
 
+Project members: Christian Kalfar, Lennart Rosseburg
+
+- [Reproducibility Checklist](checklist_reproducibility.jpg)
+
 ---
 
 ## Installation guide
@@ -19,7 +23,7 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
     ```
 5. Execute training or evaluation command(s) of your choice.
 
-## Software Versions
+## Software versions
 - python==3.9.2
 - gym==0.21.0
 - numpy==1.22.1
@@ -28,7 +32,7 @@ Reimplementation of the paper ["Evolutionary learning of interpretable decision 
 
 ---
 
-## Used Techniques
+## Used techniques
 Evolutionary algorithm (Grammatical Evolution) with Q-learning.
 
 ## Hyperparameter decisions
@@ -47,7 +51,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - 1 : Push cart to the right
 
 ### MountainCar-v0
-##### Observation Space
+##### Observation space
 - *x* ∈ [−1.2, 0.6]m : Horizontal position of the car
 - *v* ∈ [−0.07, 0.07]m/s : Horizontal velocity of the car
 
@@ -57,7 +61,7 @@ Hyperparameters were derived from the original paper to examine reproducibility.
 - 2 : Accelerate to the right
 
 ### LunarLander-v2
-##### Observation Space
+##### Observation space
 - *p<sub>x</sub>* : Horizontal position
 - *p<sub>y</sub>* : Vertical position
 - *v<sub>x</sub>* : Horizontal velocity
@@ -147,13 +151,13 @@ python test_evolution.py --grammar orthogonal --environment_name CartPole-v1 --s
 
 ##### Oblique
 ```
-python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 9 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
+python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 9 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"
 ```
 ```
-python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 2 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
+python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 2 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"
 ```
 ```
-python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 7 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"`
+python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed 7 --n_actions 2 --learning_rate 0.001 --df 0.05 --input_space 4 --episodes 10 --population_size 200 --generations 50 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 100 --types #-48,48,5,10;-50,50,5,10;-418,418,5,1000;-836,836,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-4000#indpb-0.1"
 ```
 
 > **Specs used in training:** \
@@ -165,13 +169,13 @@ python test_evolution.py --grammar oblique --environment_name CartPole-v1 --seed
 #### MountainCar-v0
 ##### Orthogonal
 ```
-python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
+python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 ```
 ```
-python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 9 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
+python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 9 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 ```
 ```
-python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
+python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 1000 --cxp 0 --mp 1 --low -1 --up 1 --genotype_len 1024 --types #-120,60,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 ```
     
 > **Specs used in training:** \
@@ -182,13 +186,13 @@ python test_evolution.py --grammar orthogonal --environment_name MountainCar-v0 
 
 ##### Oblique
 ```
-python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
+python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 7 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"
 ```
 ```
-python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 9 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
+python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 9 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"
 ```
 ```
-python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"`
+python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --seed 2 --n_actions 3 --learning_rate 0.001 --df 0.05 --input_space 2 --episodes 10 --population_size 200 --generations 2000 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 0.01 --genotype_len 100 --types #-120,70,5,100;-70,70,5,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.1"
 ```
 
 > **Specs used in training:** \
@@ -200,13 +204,13 @@ python test_evolution.py --grammar oblique --environment_name MountainCar-v0 --s
 #### LunarLander-v2
 ##### Oblique
 ```
-python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 5 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
+python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 5 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 ```
 ```
-python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 2 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
+python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 2 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 ```
 ```
-python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 9 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"`
+python test_evolution.py --grammar oblique --environment_name LunarLander-v2 --seed 9 --n_actions 4 --learning_rate "auto" --df 0.9 --input_space 8 --episodes 1000 --population_size 100 --generations 100 --cxp 0.1 --mp 1 --low -1 --up 1 --eps 1.0 --genotype_len 100 --randInit False --with_bias False --types #-000,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000;-00,1001,1000,1000 --mutation "function-tools.mutUniformInt#low-0#up-40000#indpb-0.05"
 ```
 
 > **Specs used in training:** \
@@ -248,10 +252,5 @@ python evaluation.py --environment LunarLander-v2 --grammar oblique --seed 5 --n
 
 ## Links
 - [Paper](https://arxiv.org/pdf/2012.07723.pdf)
-- [Codebase of paper](https://gitlab.com/leocus/ge_q_dts)
 - [Wikilink: Grammatical evolution](https://en.wikipedia.org/wiki/Grammatical_evolution)
 - [DEAP Library](https://github.com/deap/deap)
-
-## Project Guidelines
-- [Reproducibility Checklist](checklist_reproducibility.jpg)
-- [Lecture Powerpoint](https://studip.uni-hannover.de/sendfile.php?type=0&file_id=f59cece59252733b699685dd73438268&file_name=RL_lecture_exam_21_22.pdf)

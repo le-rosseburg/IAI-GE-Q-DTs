@@ -22,7 +22,9 @@ def string_to_dict(string):
     Results:
         (dict) result: A dict of the input string
     """
-    assert type(string) == str, "'string' must be of type 'str', got {}".format(type(string))
+    assert type(string) == str, "'string' must be of type 'str', got {}".format(
+        type(string)
+    )
     result = {}
     items = string.split("#")
 
@@ -155,7 +157,9 @@ assert args.cxp >= 0.0 and args.cxp <= 1.0
 assert args.mp >= 0.0 and args.mp <= 1.0
 assert args.decay >= 0.0 and args.decay <= 1.0
 assert args.eps >= 0.0 and args.eps <= 1.0
-assert type(args.learning_rate) == str or (args.learning_rate >= 0.0 and args.learning_rate <= 1.0)
+assert type(args.learning_rate) == str or (
+    args.learning_rate >= 0.0 and args.learning_rate <= 1.0
+)
 assert args.df >= 0.0 and args.df <= 1.0
 assert args.population_size > 0
 assert args.genotype_len > 0
@@ -164,17 +168,17 @@ assert args.episode_len > 0
 assert args.n_actions > 0
 assert args.input_space > 0
 
-input_space_size = args.input_space
 # Check if the learning rate should be constant or dynamic given the argument
 lr = "auto" if args.learning_rate == "auto" else float(args.learning_rate)
 
 
-class CLeaf(Leaf):
+class EpsilonLeaf(Leaf):
     def __init__(self):
         """
         Initializes the leaf
         """
-        super(CLeaf, self).__init__(
+        Leaf.__init__(
+            self,
             n_actions=args.n_actions,
             learning_rate=lr,
             discount_factor=args.df,
@@ -225,7 +229,7 @@ ORTHOGONAL_GRAMMAR = {
     "dt": ["<if>"],
     "if": ["if <condition>:{<action>}else:{<action>}"],
     "condition": [
-        "_in_{0}<comp_op><const_type_{0}>".format(k) for k in range(input_space_size)
+        "_in_{0}<comp_op><const_type_{0}>".format(k) for k in range(args.input_space)
     ],
     "action": ['out=_leaf;leaf="_leaf"', "<if>"],
     "comp_op": [" < ", " > "],
@@ -242,11 +246,11 @@ OBLIQUE_GRAMMAR = {
 types = (
     args.types
     if args.types is not None
-    else ";".join(["0,10,1,10" for _ in range(input_space_size)])
+    else ";".join(["0,10,1,10" for _ in range(args.input_space)])
 )
 types = types.replace("#", "")
-assert len(types.split(";")) == input_space_size, "Expected {} types, got {}.".format(
-    input_space_size, len(types.split(";"))
+assert len(types.split(";")) == args.input_space, "Expected {} types, got {}.".format(
+    args.input_space, len(types.split(";"))
 )
 
 consts = {}
@@ -275,12 +279,12 @@ if args.grammar == "oblique":
                 "<const> * (_in_{0} - {1})/({2} - {1})".format(
                     i, consts[i][0], consts[i][1]
                 )
-                for i in range(input_space_size)
+                for i in range(args.input_space)
             ]
         )
     else:
         oblique_split = "+".join(
-            ["<const> * _in_{0}".format(i) for i in range(input_space_size)]
+            ["<const> * _in_{0}".format(i) for i in range(args.input_space)]
         )
 
     # Add bias if used
@@ -341,7 +345,7 @@ def fitness(tree, episodes=args.episodes):
     np.random.seed(args.seed)
     global_cumulative_rewards = []
     env = gym.make(args.environment_name)
-    initial_perf = None
+    current_mean = None
     early_stopping_period = 30
     try:
         for iteration in range(episodes):
@@ -366,19 +370,19 @@ def fitness(tree, episodes=args.episodes):
 
             # Check stopping criterion when environment LunarLander-v2 is used
             if args.environment_name == "LunarLander-v2":
-                if initial_perf is None and iteration >= early_stopping_period:
-                    initial_perf = np.mean(global_cumulative_rewards)
+                if current_mean is None and iteration >= early_stopping_period:
+                    current_mean = np.mean(global_cumulative_rewards)
                 elif (
                     iteration % early_stopping_period == 0
                     and iteration > early_stopping_period
                 ):
                     if (
                         np.mean(global_cumulative_rewards[-early_stopping_period:])
-                        - initial_perf
+                        - current_mean
                         < 0
                     ):
                         break
-                    initial_perf = np.mean(
+                    current_mean = np.mean(
                         global_cumulative_rewards[-early_stopping_period:]
                     )
 
@@ -398,7 +402,7 @@ if __name__ == "__main__":
     if args.grammar == "orthogonal":
 
         def fit_fcn(tree):
-            return evaluate_fitness(fitness, CLeaf, tree)
+            return evaluate_fitness(fitness, EpsilonLeaf, tree)
 
     else:
 
